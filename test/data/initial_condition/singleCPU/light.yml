@@ -1,12 +1,12 @@
 irradiance:
-  nz: 500
-  dz: 0.2
+  nz: 200
+  dz: 1
   nxe: 512
   nye: 512
   num: 31
-  ztop: 5
+  ztop: 10
 photon:
-  nphoton: 1000000
+  nphoton: 10000
   kr: 10
   nxp: 512
   kbc: 0
@@ -14,7 +14,7 @@ photon:
   nyp: 512
   a: 0.007
 wave:
-  pey: 0.3141592653589793
+  pey: 0.07853981633974483
   nxeta: 512
   nyeta: 512
-  pex: 0.3141592653589793
+  pex: 0.07853981633974483
