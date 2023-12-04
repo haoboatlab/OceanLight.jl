@@ -8,5 +8,5 @@ Simulation
 
 ```@example
 using Pkg 
-Pkg.activate("https://github.com/tayT0T/LightMC.jl.git") 
+Pkg.activate("https://github.com/haoboatlab/Light.git") 
 ```
