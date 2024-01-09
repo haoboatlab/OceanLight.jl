@@ -29,18 +29,20 @@ Substitute the ``\theta_{r}`` that we found above.
 
 ## Fresnel Reflectance 
 
-In our package, we calculate the energy proportion of the light ray that being transmitted to the water, transmission coefficient. [^2]
+In our package, we calculate the energy proportion of the light ray that being transmitted to the water, but first we identify the amplitude transmission coefficient or the ratio between electric field amplitude of the transmitted light ray to the intirial light ray. [^2]
 ```math
-t_{\perp}=\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin{\theta_{t}+\theta_{r}}}
+t_{\perp}=\left\(\frac{E_{t}}{E_{0}}\right\)_{\perp}=\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin{\theta_{t}+\theta_{r}}}
 ```
 ```math
-t_{\parallel}=\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin{\theta_{t}+\theta_{r}}\cos{\theta_{r}-\theta_{t}}}
+t_{\parallel}=\left\(\frac{E_{t}}{E_{0}}\right\)_{\parallel}=\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin{\theta_{t}+\theta_{r}}\cos{\theta_{r}-\theta_{t}}}
 ```
-When ``t_{\perp}`` is corresponding to the transmitted energy of the light ray in which the electric field, that constitute the electro magnetic wave, perpendicular to the plane-of-incident , and ``t_{\parallel}`` is corresponding to the transmitted energy of the light ray in which the electric field, that constitute the electro magnetic wave, parallels to the plane-of-incident.
-To find the total transmitted energy ``t_{\perp} + t_{\parallel}``, we combine two equations, ``t_{\perp} + (-r_{\perp})=1`` and ``t_{\parallel}+r_{\parallel}=1``. Then, we normalize the total transmitted energy, so that all the values fall between 0 and 1. Therefore, 
+When ``t_{\perp}`` is corresponding to the amplitude transmission coefficient of the light ray in which the electric field, that constitute the electro magnetic wave, perpendicular to the plane-of-incident , and ``t_{\parallel}`` is corresponding to the amplitude transmission coefficient of the light ray in which the electric field, that constitute the electro magnetic wave, parallels to the plane-of-incident.
+
+The intensity of the light is proportional to the square of the amplitude, ``I \propto E^{2}``. 
+All conceivable azimuths of waves that are polarized combine to form natural or unpolarized light. Each wave can be broken down into its constituent parts. Each component will have an equal amount due to symmetry. Then, half of the amplitude transmission coefficient yields the transmission coefficient of a surface in natural light. [^3]
 
 ```math
-t = \frac{1}{2}\left\{\left[\frac{2\sin(\theta_{t})\cos(\theta')}{\sin(\theta'-\theta_{t})}\right]^2+\left[\frac{2\sin(\theta_{t})\cos(\theta')}{\sin(\theta'+\theta_{t})\cos(\theta'-\theta_{t})}\right]^2\right\}
+t = \frac{I_{t}}{I_{0}} = \frac{1}{2}\left\{\left[\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin(\theta_{r}+\theta_{t})}\right]^2+\left[\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin(\theta_{r}+\theta_{t})\cos(\theta_{r}-\theta_{t})}\right]^2\right\}
 ```
 
 ## result  
@@ -57,3 +59,4 @@ temy = -\frac{\eta_{y}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}
 ## Reference 
 [^1]: Mobley, C. (1994). Across the Surface. *Light and Water: Radiative Transfer in Natural Waters* (pp. 155-157). Academic Press. 
 [^2]: Hecht, E. (2001). The Propagation of Light. *Optics* (pp. 113-115). Addison-Wesley. 
+[^3]: Sears, F.W. (1949). Polarization *Optics* (pp. 173-174). Addison-Wesley
