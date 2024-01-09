@@ -39,6 +39,7 @@ struct Param
     xmax::Float64
     ymin::Float64
     ymax::Float64
+    "difference between the maximum and minimum value in x and y direction"
     xl::Float64
     yl::Float64
     #Surface elevation 
@@ -54,9 +55,12 @@ struct Param
     "number of photon emitted"
     nphoton::Int64
     kbc::Int64
+    "absortance coefficient"
     a::Float64
+    "scattering coefficient"
     b::Float64
     kr::Float64 # kr is the multiple of sphere detector radius to dz
+    "the distance difference in which we will emit the photon"
     ddx::Float64
     ddy::Float64
     
@@ -64,15 +68,18 @@ struct Param
                    ztop::Real,nxη::Integer,nyη::Integer,nxp::Integer,nyp::Integer,nphoton::Integer,
                    kbc::Integer,a::Real,b::Real,kr::Real)
         nx=nxe+1;         ny=nye+1
+        "lenght difference between each grid point in x and y direction"
         dx=2*pi/pex/nxe;  dy=2*pi/pey/nye
         nxs=nxη+1;        nys=nyη+1
         xmin=0;           xmax=nxe*dx
         ymin=0;           ymax=nye*dy
         xl=xmax-xmin;     yl=ymax-ymin
+        "an x and y grid where each point corresponding to the distance from (0,0)"
         x=[(i-1)*dx for i=1:nx]
         y=[(j-1)*dy for j=1:ny]
         "z: 1d array from the maximum value (in the atmosphere) to the deepest or the most negative z array"
         z=[-k*dz for k=1:nz] .+ ztop
+        "the distance difference in which we will emit the photon (total length of the calculation grid/number of grid in which we want to emit photons)"
         ddx=xl/nxp;       ddy=yl/nyp
 
         new(nx,ny,nxe,nye,num,nz,x,y,z,pex,pey,dx,dy,dz,ztop,xmin,xmax,ymin,ymax,xl,yl,
