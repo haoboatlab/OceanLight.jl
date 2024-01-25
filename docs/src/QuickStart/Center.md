@@ -1,6 +1,8 @@
 # Quick Start
 ```@example 1
-tempdir() # hide 
+import Pkg 
+Pkg.activate("https://github.com/haoboatlab/Light.git")
+import Light
 ```
 ## Initial Condition 
 
@@ -35,10 +37,7 @@ wave:
 ```
 We, then, store all the input variable in the struct p, by using the function below. 
 ```@example 1
-using Pkg # hide
-Pkg.activate("https://github.com/tayT0T/LightMC.jl.git") # hide
-import LightMC
-p=readparams()
+p = readparams()
 ```
 ```@example 1
 allind=1:p.nphoton

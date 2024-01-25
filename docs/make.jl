@@ -15,3 +15,7 @@ makedocs(
         ],
         "Reference" => "reference.md"
     ])
+
+deploydocs(;
+    repo="github.com/haoboatlab/LightMC.jl",
+)
