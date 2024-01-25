@@ -27,6 +27,7 @@ struct Param
     "z coordination"
     z::Array{Float64,1}
     #Domain
+    "pex is being used in function pdfx or the function to calculate the partial derivative of the surface elevation in x direction"
     pex::Float64
     pey::Float64
     dx::Float64
@@ -39,6 +40,7 @@ struct Param
     xmax::Float64
     ymin::Float64
     ymax::Float64
+    "difference between the maximum and minimum value in x and y direction"
     xl::Float64
     yl::Float64
     #Surface elevation 
@@ -54,9 +56,12 @@ struct Param
     "number of photon emitted"
     nphoton::Int64
     kbc::Int64
+    "absortance coefficient"
     a::Float64
+    "scattering coefficient"
     b::Float64
     kr::Float64 # kr is the multiple of sphere detector radius to dz
+    "the distance difference in which we will emit the photon"
     ddx::Float64
     ddy::Float64
     
@@ -64,15 +69,18 @@ struct Param
                    ztop::Real,nxη::Integer,nyη::Integer,nxp::Integer,nyp::Integer,nphoton::Integer,
                    kbc::Integer,a::Real,b::Real,kr::Real)
         nx=nxe+1;         ny=nye+1
+        "lenght difference between each grid point in x and y direction"
         dx=2*pi/pex/nxe;  dy=2*pi/pey/nye
         nxs=nxη+1;        nys=nyη+1
         xmin=0;           xmax=nxe*dx
         ymin=0;           ymax=nye*dy
         xl=xmax-xmin;     yl=ymax-ymin
+        "an x and y grid where each point corresponding to the distance from (0,0)"
         x=[(i-1)*dx for i=1:nx]
         y=[(j-1)*dy for j=1:ny]
         "z: 1d array from the maximum value (in the atmosphere) to the deepest or the most negative z array"
         z=[-k*dz for k=1:nz] .+ ztop
+        "the distance difference in which we will emit the photon (total length of the calculation grid/number of grid in which we want to emit photons)"
         ddx=xl/nxp;       ddy=yl/nyp
 
         new(nx,ny,nxe,nye,num,nz,x,y,z,pex,pey,dx,dy,dz,ztop,xmin,xmax,ymin,ymax,xl,yl,
@@ -450,11 +458,13 @@ function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,�
                     "if photon reflect back"
                     isign=-1
                 end
-            end        
+            end
+            "we normally work with mode 1 skip the solar_energy function"        
             if mode==2 || mode==0
                 solar_energy!(esol,kk,θ,xpb,ypb,zpb,xpe,ype,zpe,isign,p)
             end
             if isign*(z[kk]-zpe) > 0
+                "if the photon travle upward to some energy level on the surface calculate the energy at the ending point"
                 if mode==1 || mode==0
                     energy!(ed,kk,fres,θ,area,interi,interj,xpb,ypb,zpb,xpe,ype,zpe,p)
                 end
@@ -475,7 +485,8 @@ function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,�
                 if idie == 1
                     break
                 end
-            end            
+            end 
+            "at the surface calculate whether the photon reflect back to the water or refraction to the air"           
             θs,ϕs,isca,idie=interaction(p.a,p.b,ph,θps,randrng)             
             if idie == 1            
 #                println("photon $ip dies at level $kk")
@@ -494,6 +505,7 @@ function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,�
             ypb=ype
             zpb=zpe
         else
+            "if the photon travle downward (from the initial position at the water surface)"
             kk=floor(Int,(z[1]-zpb)/dz)
             if dzl>0
                 isign=1
@@ -503,7 +515,8 @@ function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,�
             end        
             dl=abs(dz/cos(θ))
             # dl is a scalar, dl>0        
-            for iint=1:inter            
+            for iint=1:inter 
+                "looping calculate the energy level at every single level that photon piercing through"           
                 if iint==inter
                     dl=dl-mod(lint,dl)
                 end            
