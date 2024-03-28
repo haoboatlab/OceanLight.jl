@@ -47,13 +47,35 @@ t = \frac{I_{t}}{I_{0}} = \frac{1}{2}\left\{\left[\frac{2\sin(\theta_{t})\cos(\t
 
 ## result  
 
-We, then, transform the reflection angle into the azimuthal angle and polar angle in the spherical coordination. 
+From the principle of least time, the path in which light travels is the path that can traveled in the least time. Hence, the incident, transmitted light ray, and the normal vector to the water surface lie in the same plane. The normal vector to the plane can be described by the cross product between incident light ray and normal vector to the water surface. When the light ray travels downward, along the z-axis, the z-axis lies on the plane, and hence, the plane is perpendicular to the xy plane. The transmitted light ray lies on the opposite side of the normal vector to the water surface. The normal vector to the water surface can be described by, ``\hat{n}_{xy}=\frac{1}{\sqrt{\eta_{x}^2+\eta_{y}^2}}\begin{bmatrix}-\eta_{x}\\-\eta_{y}\\0\end{bmatrix}```, and the angle of this vector to the x-axis is, 
+
+```math 
+\phi = \arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}}
+```
+
+The range for arccos function is ``[0,\pi]``, however, our expected azimuthal angle can span from ``[0,2\pi]``. Hence, in order to find the azimuthal angle of the transmitted light ray, we need to consider every possible case of ``\eta_{x}`` and ``\eta_{y}``.
+
+When ``\eta_{x}`` is equal to zero, the possible value for ``\phi`` is either ``\frac{\pi}{2}`` or ``\frac{3\pi}{2}``, and the value would be determined by ``\eta_{y}``.
+
+When ``\eta_{y}`` is positive, the normal vector to the water surface ``\hat{n}`` lies on either the first or second quadrant, and the azimuthal angle of transmitted light ray would lie on either third or fourth qudrant. Therfore, 
+
+```math 
+\varphi = \pi+\arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}}
+```
+
+When ``\eta_{y}`` is negative, the normal vector to the water surface ``\hat{n}`` lies on either the third or fourth quadrant, and the azimuthal angle of transmitted light ray would lie on either first or second qudrant. Therfore, 
+
+```math 
+\varphi = \pi-\arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}}
+```
+
+The result azimuthal angle of transmitted ray can be described by,
 
 ```math
-temx = -\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}
-```
-```math
-temy = -\frac{\eta_{y}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}
+\varphi =  \left\{ \begin{array}{rcl}
+         \pi+\arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}} & \mbox{for} & \eta_{y} > 0 \\ 
+         \pi-\arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}} & \mbox{for} & \eta_{y} < 0 
+         \end{array}\right
 ```
 
 ## Reference 

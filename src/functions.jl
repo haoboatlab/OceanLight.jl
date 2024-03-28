@@ -46,7 +46,9 @@ struct Param
     #Surface elevation 
     nxs::Int64 # nxs=nxη+1
     nys::Int64 # nys=nyη+1
+    "same as nxeta value in the light.yml file: the number of wave grid point in x direction"
     nxη::Int64
+    "same as nyeta value in the light.yml file: the number of wave grid point in y direction"
     nyη::Int64
     #Photon emission
     "number of grid in x direction that the photon can be emitted"
@@ -1090,10 +1092,15 @@ function energy!(ed1d::Array{<:Float64,1},edi::Array{<:Int64,1},edj::Array{<:Int
             error("Out of memory error! Increase the size of ed1d, edi, edj, and edk!")
         end
         for k=1:4
+            "count is a dummy variable just to keep track of the size of the ed1d, edi, edj, edk"
             count[1]+=1
+            "ed1d is the 1 by n matrix corresponding to the actual irradiance calculation"
             ed1d[count[1]]=(area[k]/p.dx/p.dy)*fres*cos(θ)
+            "edi is the 1 by n matrix corresponding to the x coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
             edi[count[1]]=i[k]
+            "edi is the 1 by n matrix corresponding to the y coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
             edj[count[1]]=j[k]
+            "edi is the 1 by n matrix corresponding to the z coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
             edk[count[1]]=kk
         end
     end
