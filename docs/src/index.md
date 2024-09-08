@@ -6,7 +6,3 @@ Simulation
 
 ## Installation
 
-```@example
-using Pkg 
-Pkg.activate("https://github.com/haoboatlab/Light.git") 
-```

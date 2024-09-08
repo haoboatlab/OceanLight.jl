@@ -5,8 +5,13 @@ using YAML
 using Random
 using Statistics
 using HDF5
+using DocStringExtensions
 
-"All the Parameters and their attributes that will be used in the simulation"
+"""
+All the Parameters and their attributes that will be used in the simulation
+
+$(TYPEDFIELDS)
+"""
 struct Param    
     #Irradiance energy
     "nx = nxe+1 , nxe is the number of energy grid that we will calculate for the energy in x direction"
@@ -17,31 +22,39 @@ struct Param
     nxe::Int64 
     "number of energy grid that we will calculate for the energy in y direction"
     nye::Int64 
+    "constant always set at 31 based on Measurement from Kirk, 1981 (The number of angle measurement in Kirk paper)"
     num::Int64
     "number of the layer beneath the sea surface (in z direction) that we will calculate for the irradiance energy"
     nz::Int64  
-    "x corrdination"  
+    "array of all the x corrdination"  
     x::Array{Float64,1}
-    "y cooradination"
+    "array of all the y cooradination"
     y::Array{Float64,1}
-    "z coordination"
+    "array of all the z coordination"
     z::Array{Float64,1}
     #Domain
     "pex is being used in function pdfx or the function to calculate the partial derivative of the surface elevation in x direction"
     pex::Float64
     pey::Float64
+    "the distance between each grid point in x direction"
     dx::Float64
+    "the distance between each grid point in y direction"
     dy::Float64
     "height difference between each layer that we calculate for the irradiance energy (nz)"
     dz::Float64
     "the maximum height above the water surface"
     ztop::Float64
+    "minimum x value (always set to 0)"
     xmin::Float64
+    "maximum x value equal to multiplication between total number of grid point (nxe) and the distance between each grid point (dx) in x direction"
     xmax::Float64
+    "minimum y value (always set to 0)"
     ymin::Float64
+    "maximum y value equal to multiplication between total number of grid point (nye) and the distance between each grid point (dy) in y direction"
     ymax::Float64
-    "difference between the maximum and minimum value in x and y direction"
+    "difference between the maximum and minimum value in x direction"
     xl::Float64
+    "difference between the maximum and minimum value in y direction"
     yl::Float64
     #Surface elevation 
     nxs::Int64 # nxs=nxη+1
@@ -51,22 +64,32 @@ struct Param
     "same as nyeta value in the light.yml file: the number of wave grid point in y direction"
     nyη::Int64
     #Photon emission
-    "number of grid in x direction that the photon can be emitted"
+    "number of grid in x direction that the photon will be emitted"
     nxp::Int64
-    "number of grid in y direction that the photon can be emitted"
+    "number of grid in y direction that the photon will be emitted"
     nyp::Int64
     "number of photon emitted"
     nphoton::Int64
+    "setting the mode of boundary condition: `kbc=1' (no interpolation) or periodic BC `kbc=0' (interpolation using FFT)"
     kbc::Int64
     "absortance coefficient"
     a::Float64
     "scattering coefficient"
     b::Float64
-    kr::Float64 # kr is the multiple of sphere detector radius to dz
-    "the distance difference in which we will emit the photon"
+    "the multiple of sphere detector radius to dz (not being used anywhere in the code)"
+    kr::Float64
+    "the distance difference in x direction in which we will emit the photon (total length of physical grid xl devided by total number of photon grid nxp)"
     ddx::Float64
+    "the distance difference in y direction in which we will emit the photon (total length of physical grid yl devided by total number of photon grid nyp)"
     ddy::Float64
-    
+
+""" 
+    Param(nxe::Integer,nye::Integer,num::Integer,nz::Integer,pex::Real,pey::Real,dz::Real,
+                   ztop::Real,nxη::Integer,nyη::Integer,nxp::Integer,nyp::Integer,nphoton::Integer,
+                   kbc::Integer,a::Real,b::Real,kr::Real)
+
+Calculating for other varibles in the struct param besides the input variable (ie. nx, dx , nxs, xl, xmin, x, ddx, etc.)
+"""
     function Param(nxe::Integer,nye::Integer,num::Integer,nz::Integer,pex::Real,pey::Real,dz::Real,
                    ztop::Real,nxη::Integer,nyη::Integer,nxp::Integer,nyp::Integer,nphoton::Integer,
                    kbc::Integer,a::Real,b::Real,kr::Real)
@@ -141,7 +164,11 @@ function readparams(fname="light.yml"::String)
     return Param(nxe,nye,num,nz,pex,pey,dz,ztop,nxη,nyη,nxp,nyp,nphoton,kbc,a,b,kr)
 end
 
-"Create the dictionary of the data from light.yml file"
+""" 
+    writeparams(p::Param,fname="light.yml"::String)
+
+Replace the data in the yml file `fname to the new struct Param `P`. If `fname` is unspecified, use `light.yml` as the default file name.
+"""
 function writeparams(p::Param,fname="light.yml"::String)    
     data=Dict("irradiance"=>Dict("nxe"=>p.nxe,"nye"=>p.nye,"nz"=>p.nz,"dz"=>p.dz,"ztop"=>p.ztop,"num"=>p.num),
               "wave"=>Dict("pex"=>p.pex,"pey"=>p.pey,"nxeta"=>p.nxη,"nyeta"=>p.nyη),
@@ -150,7 +177,11 @@ function writeparams(p::Param,fname="light.yml"::String)
     return nothing
 end
 
-"Write or replace the data in the light.yml file to the new dictionary data"
+""" 
+    writeparams(data::Dict,fname="light.yml"::String)
+
+Replace the data in the yml file `fname to the new dictionary `data`. If `fname` is unspecified, use `light.yml` as the default file name.
+"""
 function writeparams(data::Dict,fname="light.yml"::String)    
     YAML.write_file(fname,data)    
     return nothing
@@ -197,6 +228,11 @@ function eta2rad!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},η::Array{<:Fl
               η,ph,θps,p,1)
 end
 
+"""
+    applybc!(ed::Array{<:Float64,3},p::Param)
+
+Applying the periodic boundary condition on our irradiance output grid `ed` if constant kbc sets to 1 
+"""
 function applybc!(ed::Array{<:Float64,3},p::Param)
     if p.kbc == 0
         for k=1:p.nz
@@ -207,7 +243,12 @@ function applybc!(ed::Array{<:Float64,3},p::Param)
     end
 end
 
-"This function setting the initial condition of the wave surface distribution"
+"""
+    setwave!(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},rms::Float64,p::Param)
+
+Giving the value to the existed wave surface distribution grid: water surface elevation (η), partial derivative of water surface elevation in
+x and y (ηx and ηy), based on the random number and variable `rms`
+"""
 function setwave!(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},rms::Float64,p::Param)
     η[:,:]=rand(p.nxη,p.nyη)    # /eta is the wave height function
     η[:,:]=η.-mean(η)
@@ -253,6 +294,12 @@ function convertwave!(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{
     return nothing
 end
 
+"""
+    readdata(datdir::String,fname::String,n::Tuple{<:Int64,<:Int64},pexy::Tuple{<:Float64,<:Float64})
+
+Reading the wave surface distribution data (surface elevation η and partial derivative of it in x and y ηx and ηy) from the .h5 file,
+given the directory `datdir` and the file name `fname`
+"""
 function readdata(datdir::String,fname::String,n::Tuple{<:Int64,<:Int64},pexy::Tuple{<:Float64,<:Float64})
     fid=h5open(datdir*fname,"r")
     η=read("eta_hos")        
@@ -275,7 +322,9 @@ function readdata(datdir::String,fname::String,n::Tuple{<:Int64,<:Int64},pexy::T
 end
 
 """
-    interface!(xpb, ypb, zpb, θ, ϕ, fres, η, ηx, ηy, p)
+    interface!(xpb::Array{<:Float64,2},ypb::Array{<:Float64,2},zpb::Array{<:Float64,2},
+                    θ::Array{<:Float64,2},ϕ::Array{<:Float64,2},fres::Array{<:Float64,2},
+                    η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},p::Param)
 
 Calculate the reflection and refraction of the photon or light ray that transmit from the atmosphere to the water.
 By using the Fresnel Reflectance Equation, we obtain the direction of photon in x, y, z coordinate, 
@@ -891,7 +940,12 @@ end
 #     return nothing
 # end 
 
+"""
+    regulatexy(xpe::Float64,ype::Float64,p::Param)
 
+Applying the periodic boundary condition if the landed photons coordination (xpe and ype) is higher or lower 
+than its boundary (xmax,ymax,xmin,xmax)
+"""
 function regulatexy(xpe::Float64,ype::Float64,p::Param)
     while xpe < p.xmin
         xpe=xpe+p.xl
@@ -1473,26 +1527,42 @@ function updateed!(ed::Array{<:Float64,3},ed1d::Array{<:Float64,1},edi::Array{<:
     end
     return nothing
 end
-    
+
+"""
+    exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
+                  fname::String,mode="2D"::String,nk=0::Int64)
+
+exported the irradiance data into `fname`.h5 file. There are 3 modes of exporting the data: `2D`, `3D`, and `full`.
+If not specified the mode will automatically set to `2D`. 
+In every mode, there would be at least 4 files xz.h5, yz.h5, xy.h5, and stat.h5, with the `fname` in the front. First three are corresponding
+to the 2D irradiance field, and the last one corresponding to the statistics at each depth. 
+In `3D` mode, also exporting the whole 3D irradiance grid, and in `full` mode, in addition to the 3D irradiance field, exporting the 
+coordination corresponding to each point on the grid.
+"""
 function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
                   fname::String,mode="2D"::String,nk=0::Int64)
     if mode=="3D"
+        # mode `3D` store only ed (3D irradiance grid) in the `fname` file
         h5open(fname*".h5","w") do fid
             write(fid,"ed",Float32.(ed))
         end
     end
 
     if mode=="full"
+        # mode `full` store 4 dataset (the irradiance of the grid and 3 coordination array x,y,z) in the `fname` file
         x=similar(ed)
         y=similar(ed)
         z=similar(ed)
         for j=1:p.ny,k=1:p.nz
+            # 3D array x stores the x coordination of the grid  
             x[:,j,k]=p.x        
         end
         for i=1:p.nx,k=1:p.nz
+            # 3D array y stores the y coordination of the grid 
             y[i,:,k]=p.y
         end
         for i=1:p.nx,j=1:p.ny
+            # 3D array z stores the z coordination of the grid 
             z[i,j,:]=p.z
         end
         h5open(fname*".h5","w") do fid
@@ -1503,9 +1573,13 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
         end
     end
 
+    "x2d stores the coordination of x at every depth"
     x2d=zeros(p.nx,p.nz)
+    "y2d stores the coordination of y at every depth"
     y2d=zeros(p.ny,p.nz)
+    "zx2d stores the z coordination (depth) at every x coordinattion"
     zx2d=zeros(p.nx,p.nz)
+    "zy2d stores the z coordination (depth) at every y coordinattion"
     zy2d=zeros(p.ny,p.nz)
     for k=1:p.nz
         x2d[:,k]=p.x        
@@ -1520,9 +1594,12 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
         zy2d[j,:]=p.z
     end
 
+    "xη is x coordination on the wave surface grid spanning from 0 to the total length of the whole grid "
     xη=[(i-1)*p.xl/p.nxη for i=1:p.nxs]
+    "yη is y coordination on the wave surface grid spanning from 0 to the total length of the whole grid "
     yη=[(j-1)*p.yl/p.nyη for j=1:p.nys]
     h5open(fname*"xz.h5","w") do fid
+        # `fname` + xz.h5 file stores 5 datasets: the irradiance field at 1st column, x2d, zx2d, xη and surface elevation at 1st column
         write(fid,"ed",ed[:,1,:])
         write(fid,"x",x2d)
         write(fid,"z",zx2d)
@@ -1531,6 +1608,7 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
     end
 
     h5open(fname*"yz.h5","w") do fid
+         # `fname` + yz.h5 file stores 5 datasets: the irradiance field at 1st row, y2d, zy2d, yη and surface elevation at 1st row
         write(fid,"ed",ed[1,:,:])
         write(fid,"y",y2d)
         write(fid,"z",zy2d)
@@ -1540,6 +1618,7 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
 
     if nk>0
         h5open(fname*"xy.h5","w") do fid
+            # `fname` + xy.h5 file stores only the irradiance field at speific depth `nk`
             write(fid,"ed",ed[:,:,nk])
             # write(fid,"y",y2d)
             # write(fid,"z",zy2d)
@@ -1548,6 +1627,7 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
         end
     end
     
+    "the highest possible value of the number of grid that will be above the water surface"
     kcut=ceil(Int,(p.ztop-minimum(η))/p.dz)
     
     μ,σ,cv=edstats(ed,p)
@@ -1555,6 +1635,7 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
     σ[1:kcut].=-1
     cv[1:kcut].=-1
     h5open(fname*"stats.h5","w") do fid
+        #  `fname` + stats.h5 file stores 4 dataset: variance, mean, cv, and depth
         write(fid,"var",σ)
         write(fid,"mean",μ)
         write(fid,"cv",cv)
@@ -1563,6 +1644,11 @@ function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
     return nothing
 end
 
+"""
+    edstats(ed::Array{<:Real,3},p::Param)
+
+Calculate and return the value of mean μ, standard deviation σ, and cv, at each depth 
+"""
 function edstats(ed::Array{<:Real,3},p::Param)
     μ=zeros(p.nz)
     σ=zeros(p.nz)
