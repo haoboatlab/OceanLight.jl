@@ -72,10 +72,12 @@ When ``\eta_{y}`` is negative, the normal vector to the water surface ``\hat{n}`
 The result azimuthal angle of transmitted ray can be described by,
 
 ```math
-\varphi =  \left\{ \begin{array}{rcl}
-         \pi+\arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}} & \mbox{for} & \eta_{y} > 0 \\ 
-         \pi-\arccos{\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}} & \mbox{for} & \eta_{y} < 0 
-         \end{array}\right
+\varphi = \left\{
+\begin{array}{ll}
+\pi+\arccos\left(\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}\right) & \text{for } \eta_{y} > 0 \\[10pt]
+\pi-\arccos\left(\frac{\eta_{x}}{\sqrt{(\eta_{x})^{2}+(\eta_{y})^{2}}}\right) & \text{for } \eta_{y} < 0
+\end{array}
+\right.
 ```
 
 ## Reference 

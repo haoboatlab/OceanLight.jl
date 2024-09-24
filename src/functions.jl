@@ -8,8 +8,9 @@ using HDF5
 using DocStringExtensions
 
 """
-All the Parameters and their attributes that will be used in the simulation
+    struct Param    
 
+All the Parameters and their attributes that will be used in the simulation
 $(TYPEDFIELDS)
 """
 struct Param    
@@ -35,6 +36,7 @@ struct Param
     #Domain
     "pex is being used in function pdfx or the function to calculate the partial derivative of the surface elevation in x direction"
     pex::Float64
+    "pey is being used in function pdfx or the function to calculate the partial derivative of the surface elevation in y direction"
     pey::Float64
     "the distance between each grid point in x direction"
     dx::Float64
@@ -57,8 +59,10 @@ struct Param
     "difference between the maximum and minimum value in y direction"
     yl::Float64
     #Surface elevation 
-    nxs::Int64 # nxs=nxη+1
-    nys::Int64 # nys=nyη+1
+    "nxs=nxη+1"
+    nxs::Int64 
+    "nys=nyη+1"
+    nys::Int64
     "same as nxeta value in the light.yml file: the number of wave grid point in x direction"
     nxη::Int64
     "same as nyeta value in the light.yml file: the number of wave grid point in y direction"
@@ -70,7 +74,7 @@ struct Param
     nyp::Int64
     "number of photon emitted"
     nphoton::Int64
-    "setting the mode of boundary condition: `kbc=1' (no interpolation) or periodic BC `kbc=0' (interpolation using FFT)"
+    "setting the mode of boundary condition: `kbc=1` (no interpolation) or periodic BC `kbc=0` (interpolation using FFT)"
     kbc::Int64
     "absortance coefficient"
     a::Float64
@@ -83,13 +87,6 @@ struct Param
     "the distance difference in y direction in which we will emit the photon (total length of physical grid yl devided by total number of photon grid nyp)"
     ddy::Float64
 
-""" 
-    Param(nxe::Integer,nye::Integer,num::Integer,nz::Integer,pex::Real,pey::Real,dz::Real,
-                   ztop::Real,nxη::Integer,nyη::Integer,nxp::Integer,nyp::Integer,nphoton::Integer,
-                   kbc::Integer,a::Real,b::Real,kr::Real)
-
-Calculating for other varibles in the struct param besides the input variable (ie. nx, dx , nxs, xl, xmin, x, ddx, etc.)
-"""
     function Param(nxe::Integer,nye::Integer,num::Integer,nz::Integer,pex::Real,pey::Real,dz::Real,
                    ztop::Real,nxη::Integer,nyη::Integer,nxp::Integer,nyp::Integer,nphoton::Integer,
                    kbc::Integer,a::Real,b::Real,kr::Real)
@@ -116,7 +113,9 @@ end
 """ 
     readparams(fname="light.yml")
 
-Read parameters from yml file `fname`. If `fname` is unspecified, use `light.yml` as the default file name.
+Read parameters from yml file `fname`. 
+
+If `fname` is unspecified, use `light.yml` as the default file name.
 """
 function readparams(fname="light.yml"::String)
     data = YAML.load_file(fname)
@@ -167,7 +166,9 @@ end
 """ 
     writeparams(p::Param,fname="light.yml"::String)
 
-Replace the data in the yml file `fname to the new struct Param `P`. If `fname` is unspecified, use `light.yml` as the default file name.
+Replace the data in the yml file `fname` to the new struct Param `P`.
+    
+If `fname` is unspecified, use `light.yml` as the default file name.
 """
 function writeparams(p::Param,fname="light.yml"::String)    
     data=Dict("irradiance"=>Dict("nxe"=>p.nxe,"nye"=>p.nye,"nz"=>p.nz,"dz"=>p.dz,"ztop"=>p.ztop,"num"=>p.num),
@@ -180,7 +181,9 @@ end
 """ 
     writeparams(data::Dict,fname="light.yml"::String)
 
-Replace the data in the yml file `fname to the new dictionary `data`. If `fname` is unspecified, use `light.yml` as the default file name.
+Replace the data in the yml file `fname to the new dictionary `data`. 
+
+If `fname` is unspecified, use `light.yml` as the default file name.
 """
 function writeparams(data::Dict,fname="light.yml"::String)    
     YAML.write_file(fname,data)    
@@ -231,7 +234,7 @@ end
 """
     applybc!(ed::Array{<:Float64,3},p::Param)
 
-Applying the periodic boundary condition on our irradiance output grid `ed` if constant kbc sets to 1 
+Applying the periodic boundary condition on our irradiance output grid `ed` if `kbc` sets to 1 
 """
 function applybc!(ed::Array{<:Float64,3},p::Param)
     if p.kbc == 0
@@ -246,8 +249,13 @@ end
 """
     setwave!(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},rms::Float64,p::Param)
 
-Giving the value to the existed wave surface distribution grid: water surface elevation (η), partial derivative of water surface elevation in
-x and y (ηx and ηy), based on the random number and variable `rms`
+Giving the value to the existed wave surface distribution grid
+# Arguments
+- `η::Array{<:Float64,2}`: water surface elevation.
+- `ηx::Array{<:Float64,2}`: partial derivative of water surface elevation in x direction.
+- `ηy::Array{<:Float64,2}`: partial derivative of water surface elevation in y direction.
+- `rms::Float64`: random number.
+- `p::Param`: simulation parameters.
 """
 function setwave!(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},rms::Float64,p::Param)
     η[:,:]=rand(p.nxη,p.nyη)    # /eta is the wave height function
@@ -327,8 +335,17 @@ end
                     η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},p::Param)
 
 Calculate the reflection and refraction of the photon or light ray that transmit from the atmosphere to the water.
-By using the Fresnel Reflectance Equation, we obtain the direction of photon in x, y, z coordinate, 
-the angle θ and ϕ, and the reflectance (fres, r(θ), or fractional reflectance for unpolarized light)
+# Arguments
+- `xpb::Array{<:Float64,2}`: initial x coordination of the photon.
+- `ypb::Array{<:Float64,2}`: initial y coordination of the photon.
+- `zpb::Array{<:Float64,2}`: initial z coordination of the photon.
+- `θ::Array{<:Float64,2}`: angle of the light ray relative to the z axis: polar angle.
+- `ϕ::Array{<:Float64,2}`: angle of the light ray relative to the x axis: azimuthal angle.
+- `fres::Array{<:Float64,2}`: fresnel coefficient or fractional transmission for unpolarized light
+- `η::Array{<:Float64,2}`: water surface elevation.
+- `ηx::Array{<:Float64,2}`: partial derivative of water surface elevation in x direction.
+- `ηy::Array{<:Float64,2}`: partial derivative of water surface elevation in y direction.
+- `p::Param`: simulation parameters.
 """
 function interface!(xpb::Array{<:Float64,2},ypb::Array{<:Float64,2},zpb::Array{<:Float64,2},
                     θ::Array{<:Float64,2},ϕ::Array{<:Float64,2},fres::Array{<:Float64,2},
@@ -351,7 +368,7 @@ function interface(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:F
     ypb=zeros(p.nxp,p.nyp)
     "the z-axis coordination of the Photon's position at the beginning"
     zpb=zeros(p.nxp,p.nyp)
-    "the angle of the light ray relative to the z axis: solar angle"
+    "the angle of the light ray relative to the z axis: polar angle"
     θ=zeros(p.nxp,p.nyp)
     "the angle of the light ray relative to the x axis: azimuthal angle"
     ϕ=zeros(p.nxp,p.nyp)
@@ -399,7 +416,7 @@ function interface(ix::Int64,iy::Int64,η::Array{<:Float64,2},ηx::Array{<:Float
     gama=acos(1/(ηx0^2+ηy0^2+1)^0.5)               
     "gamap -- angle of trasmission"        
     gamap=asin(((ηx0^2+ηy0^2)/(ηx0^2+ηy0^2+1))^0.5*na/nw)  
-    "θ is polar angle; angle between z axis and transmittdd ray, when the photons is coming directly downward [0;0;-1]"
+    "θ is polar angle; angle between z axis and transmitted ray, when the photons is coming directly downward [0;0;-1]"
     θ=gama-gamap                
     if abs(gama) < 1e-12  
         "if the angle is near zero, all the energy will transmit into the water, without any reflection" 
@@ -454,7 +471,26 @@ end
                    interj::Vector{Int64},randrng,η::Array{<:Float64,2},ph::Array{<:Float64,1},
                    θps::Array{<:Float64,1},p::Param,mode=0::Int64)
 
-Doing the Monte Carlo Simulation
+Doing the Monte Carlo Simulation.
+# Arguments
+- `ed::Array{<:Float64,3}`: Irradiance solution grid 
+- `esol::Array{<:Float64,2}`: 
+- `θ::Float64`: angle of the light ray relative to the z axis: polar angle.
+- `ϕ::Float64`: angle of the light ray relative to the x axis: azimuthal angle.
+- `fres::Float64`: fresnel coefficient or fractional transmission for unpolarized light
+- `ip::Int64`: current photon's number being simulated (ie. ip ∈ {1, 2,..., nphoton}) 
+- `xpb::Float64`: initial x coordination of the photon.
+- `ypb::Float64`: initial y coordination of the photon.
+- `zpb::Float64`: initial z coordination of the photon.
+- `area::Vector{Float64}`: 4 values of the area inside a single grid where a photon lands corresponding to: 4 corners of the square grid.
+- `interi::Vector{Int64}`: x coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
+- `interj::Vector{Int64}`: y coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
+- `randrng`: PRNGs (pseudorandom number generators) exported by the Random package.
+- `η::Array{<:Float64,2}`: water surface elevation.
+- `ph::Array{<:Float64,1}`: cumulation distribution of scattering angle (obtained from `phasePetzold()`)
+- `θps::Array{<:Float64,1}`: angle between new trajectory and the direction of the photon before scattering corresponding to each `ϕps` (obtained from `phasePetzold()`)
+- `p::Param`: simulation parameters.
+- `mode::Int64`:
 """
 function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,ϕ::Float64,fres::Float64,ip::Int64,
                    xpb::Float64,ypb::Float64,zpb::Float64,area::Vector{Float64},interi::Vector{Int64},
@@ -629,6 +665,34 @@ function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,�
     return nothing
 end 
 
+"""
+    transfer!(ed1d::Array{<:Float64,1},edi::Array{<:Int64,1},edj::Array{<:Int64,1},
+                   edk::Array{<:Int64,1},count::Array{<:Int64,1},esol::Array{<:Float64,2},θ::Float64,ϕ::Float64,fres::Float64,
+                   ip::Int64,xpb::Float64,ypb::Float64,zpb::Float64,randrng,η::Array{<:Float64,2},
+                   ph::Array{<:Float64,1},θps::Array{<:Float64,1},p::Param,mode=0::Int64)
+
+Doing the Monte Carlo Simulation.
+# Arguments
+- `ed1d::Array{<:Float64,1}`: fraction of irradiance that will be assigned to 4 corners of a grid where a photon lands
+- `edi::Array{<:Int64,1}`: x coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
+- `edj::Array{<:Int64,1}`: y coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
+- `edk::Array{<:Int64,1}`: number of the energy layer that the photons travel, from the top ztop in 1 by 4 array
+- `count::Array{<:Int64,1}`: dummy integer span from 1 to 4 to keep track of the size of the ed1d, edi, edj, edk.
+- `esol::Array{<:Float64,2}`:
+- `θ::Float64`: angle of the light ray relative to the z axis: polar angle.
+- `ϕ::Float64`: angle of the light ray relative to the x axis: azimuthal angle.
+- `fres::Float64`: fresnel coefficient or fractional transmission for unpolarized light.
+- `ip::Int64`: current photon's number being simulated (ie. ip ∈ {1, 2,..., nphoton}) 
+- `xpb::Float64`: initial x coordination of the photon.
+- `ypb::Float64`: initial y coordination of the photon.
+- `zpb::Float64`: initial z coordination of the photon.
+- `randrng`: PRNGs (pseudorandom number generators) exported by the Random package
+- `η::Array{<:Float64,2}`: water surface elevation.
+- `ph::Array{<:Float64,1}`: cumulation distribution of scattering angle (obtained from `phasePetzold()`)
+- `θps::Array{<:Float64,1}`: angle between new trajectory and the direction of the photon before scattering corresponding to each `ϕps` (obtained from `phasePetzold()`)
+- `p::Param`: simulation parameters.
+- `mode::Int64`: 
+"""
 function transfer!(ed1d::Array{<:Float64,1},edi::Array{<:Int64,1},edj::Array{<:Int64,1},
                    edk::Array{<:Int64,1},count::Array{<:Int64,1},esol::Array{<:Float64,2},θ::Float64,ϕ::Float64,fres::Float64,
                    ip::Int64,xpb::Float64,ypb::Float64,zpb::Float64,randrng,η::Array{<:Float64,2},
@@ -914,7 +978,7 @@ end
 #                 zpb=zpe
 #                 if zpb < z[nz]
 #                     idie=1
-# #                    println("photon $ip reaches bottom and dies !")
+#                     println("photon $ip reaches bottom and dies !")
 #                     break
 #                 end
 #             end
@@ -1042,14 +1106,26 @@ function interlength(dz::Float64,θ::Float64,c::Float64,randrng)
 end
 
 """
-function energy!(ed::Array{<:Float64,3},kk::Int64,fres::Float64,θ::Float64,xpb::Float64,
-                 ypb::Float64,zpb::Float64,xpe::Float64,ype::Float64,zpe::Float64,p::Param)
+    energy!(ed::Array{<:Float64,3},kk::Int64,fres::Float64,θ::Float64,
+                 area::Vector{Float64},interi::Vector{Int64},interj::Vector{Int64},
+                 xpb::Float64,ypb::Float64,zpb::Float64,xpe::Float64,ype::Float64,zpe::Float64,p::Param)
 
-Input `kk' the vertical level, `fres' the Fresnel coefficient, `θ' the photon propagation direction, 
-(`xpb',`ypb',`zpb') the coordinates of the photon, (`xpe',`ype',`zpe') the coordinates of the irradiance field,
-and `p' the parameters.
-
-Update the 3D irradiance field `ed'.
+Update the 3D irradiance field `ed'.   
+# Arguments
+- `ed::Array{<:Float64,3}`: Irradiance solution grid 
+- `kk::Int64`: number of the energy layer that the photons travel, from the top ztop
+- `fres::Float64`: Fresnel coefficient.
+- `θ::Float64`: photon propagation direction.
+- `area::Vector{Float64}`: 4 values of the area inside a single grid where a photon lands corresponding to: 4 corners of the square grid.
+- `interi::Vector{Int64}`: x coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
+- `interj::Vector{Int64}`: y coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
+- `xpb::Float64`: initial x coordination of the photon.
+- `ypb::Float64`: initial y coordination of the photon.
+- `zpb::Float64`: initial z coordination of the photon.
+- `xpe::Float64`: x coordination of where photon end up to
+- `ype::Float64`: y coordination of where photon end up to
+- `zpe::Float64`: z coordination of where photon end up to
+- `p::Param`: simulation parameters                
 """
 function energy!(ed::Array{<:Float64,3},kk::Int64,fres::Float64,θ::Float64,
                  area::Vector{Float64},interi::Vector{Int64},interj::Vector{Int64},
@@ -1152,9 +1228,9 @@ function energy!(ed1d::Array{<:Float64,1},edi::Array{<:Int64,1},edj::Array{<:Int
             ed1d[count[1]]=(area[k]/p.dx/p.dy)*fres*cos(θ)
             "edi is the 1 by n matrix corresponding to the x coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
             edi[count[1]]=i[k]
-            "edi is the 1 by n matrix corresponding to the y coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
+            "edj is the 1 by n matrix corresponding to the y coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
             edj[count[1]]=j[k]
-            "edi is the 1 by n matrix corresponding to the z coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
+            "edk is the 1 by n matrix corresponding to the z coordination of the energy ex: ed(edi(count),edj(count),edk(count)) = ed1d(count)"
             edk[count[1]]=kk
         end
     end
@@ -1235,11 +1311,10 @@ end
 """
     interaction(a, b, ph, θps, randrng)
 
-Determine whether or not photon being absorb or scattering, and 
-if the photon is scattered, determined the angle in the plane of the scattering event relative to the direction of photons before scattering
-when ϕ is azimuthal angle, and θ is angle between scattered direction and direction of photons before scattering
+Determine whether or not photon being absorb or scattering.
+ 
+If the photon is scattered, determined the angle in the plane of the scattering event relative to the direction of photons before scattering
 """
-
 function interaction(a::Float64,b::Float64,ph::Array{<:Float64,1},θps::Array{<:Float64,1},randrng)
     # this subroutine use petzold's scattering phase function
     ro1=rand(randrng)
@@ -1317,10 +1392,10 @@ end
 """
     phasePetzold()
 
-return 2 arrays: ϕps and θps. When ϕps is the cumulation distribution of scattering angle and
-θps is the angle between new trajectory and the direction of the photon before scattering corresponding to each ϕps
-For example, the probability to find the scattering photon from the direction of the photon before scattering to θps[1] is ϕps[1]
-The data come from Kirk,1981, Monte Carlo Procedure for Simulating the Penetration of Light into Natural Waters
+return 2 arrays: `ϕps` and `θps`. 
+
+When `ϕps` is the cumulation distribution of scattering angle and
+`θps` is the angle between new trajectory and the direction of the photon before scattering corresponding to each `ϕps`.
 """
 function phasePetzold()
     #ph is the cumulative distribution function for the Petzold measurement
@@ -1345,8 +1420,7 @@ end
 """
     scatter(θ,ϕ,θs,ϕs) 
 
-changing the scattered ray frame of referece, from the local system to the sphere coordination
-when, θ is polar angle, ϕ is azimuthal angle, and θs and ϕs are scattering angle with respect to the initial direction
+changing the scattered ray frame of referece, from the local system to the sphere coordination.
 """
 function scatter(θ::Float64,ϕ::Float64,θs::Float64,ϕs::Float64)      
     "μx is the cartesian coordination in x direction of the unit vector in initial direction: (μx,μy,μz)"
@@ -1415,7 +1489,6 @@ end
     
 Checking whether or not the photon go through the surface back to air side
 """
-
 function surface(idie::Int64,isca::Int64,xpe::Float64,ype::Float64,zpe::Float64,
                  area::Vector{Float64},interi::Vector{Int64},interj::Vector{Int64},
                  η::Array{<:Float64,2},ip::Int64,p::Param)
@@ -1532,12 +1605,9 @@ end
     exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
                   fname::String,mode="2D"::String,nk=0::Int64)
 
-exported the irradiance data into `fname`.h5 file. There are 3 modes of exporting the data: `2D`, `3D`, and `full`.
-If not specified the mode will automatically set to `2D`. 
-In every mode, there would be at least 4 files xz.h5, yz.h5, xy.h5, and stat.h5, with the `fname` in the front. First three are corresponding
-to the 2D irradiance field, and the last one corresponding to the statistics at each depth. 
-In `3D` mode, also exporting the whole 3D irradiance grid, and in `full` mode, in addition to the 3D irradiance field, exporting the 
-coordination corresponding to each point on the grid.
+exported the irradiance data into `fname`.h5 file. 
+
+There are 3 modes of exporting the data: `2D`, `3D`, and `full`. If not specified the mode will automatically set to `2D`. 
 """
 function exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
                   fname::String,mode="2D"::String,nk=0::Int64)
@@ -1647,7 +1717,7 @@ end
 """
     edstats(ed::Array{<:Real,3},p::Param)
 
-Calculate and return the value of mean μ, standard deviation σ, and cv, at each depth 
+Calculate and return the value of mean `μ`, standard deviation `σ`, and `cv`, at each depth 
 """
 function edstats(ed::Array{<:Real,3},p::Param)
     μ=zeros(p.nz)

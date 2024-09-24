@@ -7,6 +7,8 @@ transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,ϕ::Float6
                    θps::Array{<:Float64,1},p::Param,mode=0::Int64)
 ```
 
+## Another method
+
 ```@docs
 transfer!(ed1d::Array{<:Float64,1},edi::Array{<:Int64,1},edj::Array{<:Int64,1},
                    edk::Array{<:Int64,1},count::Array{<:Int64,1},esol::Array{<:Float64,2},θ::Float64,ϕ::Float64,fres::Float64,
