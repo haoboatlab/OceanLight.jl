@@ -1,9 +1,7 @@
 using LightMC
 using Test 
 using YAML
-using HDF5
 using Random
-using UnicodePlots
 using Statistics
 
 parameter = LightMC.readparams("data/initial_condition/singleCPU/light.yml")
