@@ -2,7 +2,7 @@
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "9e0ed099bb0bda41f3151d423b54199d9c0fd3eb"
+project_hash = "df57e28bff39f1879fdff44a815e7c1e8cf59a9e"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -130,6 +130,11 @@ version = "7.84.0+0"
 [[deps.LibGit2]]
 deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
+
+[[deps.LibGit2_jll]]
+deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
+uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
+version = "1.5.0+1"
 
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
