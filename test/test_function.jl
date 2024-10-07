@@ -1,12 +1,12 @@
-using LightMC
+using OceanLight
 using Test 
 using YAML
 using HDF5
 using Random
 using Statistics
 
-parameter = LightMC.readparams("data/initial_condition/singleCPU/light.yml")
-ϕps,θps = LightMC.phasePetzold()
+parameter = OceanLight.readparams("data/initial_condition/singleCPU/light.yml")
+ϕps,θps = OceanLight.phasePetzold()
 
 η=zeros(parameter.nxs,parameter.nys)
 ηx=zeros(parameter.nxs,parameter.nys)
@@ -18,7 +18,7 @@ fid=h5open("data/initial_condition/singleCPU/surfwave1.h5","r")
 ηy0=read(fid,"ey")
 close(fid)
     
-LightMC.convertwave!(η,ηx,ηy,η0,ηx0,ηy0,parameter.kbc)
+OceanLight.convertwave!(η,ηx,ηy,η0,ηx0,ηy0,parameter.kbc)
 
 @testset "Initial Condition" begin
     @testset "readparams()" begin
@@ -37,7 +37,7 @@ LightMC.convertwave!(η,ηx,ηy,η0,ηx0,ηy0,parameter.kbc)
     end
 end
 
-xpb,ypb,zpb,θ,ϕ,fres = LightMC.interface(η,ηx,ηy,parameter)
+xpb,ypb,zpb,θ,ϕ,fres = OceanLight.interface(η,ηx,ηy,parameter)
 
 @testset "Refraction between atmosphere and water" begin
     @testset "interface()" begin
@@ -60,7 +60,7 @@ iy=div(parameter.nyη,2)+1
 @time begin
     for ind=1:parameter.nphoton
         ip=allind[ind]
-        LightMC.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
+        OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
         ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,parameter,1)
     end
 end
@@ -75,8 +75,8 @@ end
 end
 
 test_data = tempdir()
-LightMC.applybc!(ed,parameter)
-LightMC.exported(ed,η,parameter,test_data*"/ed","3D")
+OceanLight.applybc!(ed,parameter)
+OceanLight.exported(ed,η,parameter,test_data*"/ed","3D")
 
 Test_ed = h5open(test_data*"/ed.h5","r")
 test_ed = read(Test_ed,"ed")

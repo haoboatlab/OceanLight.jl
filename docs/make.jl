@@ -1,7 +1,7 @@
-using Documenter, LightMC
+using Documenter, OceanLight
 
 makedocs(
-    sitename="LightMC.jl", format = Documenter.HTML(prettyurls = false),
+    sitename="OceanLight.jl", format = Documenter.HTML(prettyurls = false),
     pages = [
         "Home" => "index.md",
         "Module" => [
@@ -19,5 +19,5 @@ makedocs(
     ])
 
 deploydocs(;
-    repo="github.com/haoboatlab/LightMC.jl",
+    repo="github.com/haoboatlab/OceanLight.jl",
 )
