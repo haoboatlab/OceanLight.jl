@@ -1,10 +1,15 @@
 # Model Setup
 
+OceanLight.jl simulation reads all required variable from the struct `param`. The description on how to generate and setup the model is described below in this section.  
+
 ## Input Variable
+
+OceanLight.jl accepts and reads the input variables from .yml file. The structure on what variable to includes is shown below. 
 
 ```@docs
 writeparams(data::Dict,fname="light.yml"::String)
 ```
+This function only read the `dict` format. Hence, we first need to rearrange into `dict` format, before we can called the function `writeparams()`. 
 
 ```@example 
 # irradiance
@@ -34,6 +39,8 @@ data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>zto
 ```
 
 ## Simulation Parameters
+
+OceanLight.jl reads all input variables in .yml format through the function `readparams()`, and store the values in structure `Param`. Beside our provided value, it will auto-generate some of the parameters that will be used in the simulation. The list and description of all the values can be accessed below. 
 
 ```@docs
 readparams(fname="light.yml"::String)
