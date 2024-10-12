@@ -181,7 +181,7 @@ end
 """ 
     writeparams(data::Dict,fname="light.yml"::String)
 
-Replace the data in the yml file `fname to the new dictionary `data`. 
+Replace the data in the yml file `fname` to the new dictionary `data`. 
 
 If `fname` is unspecified, use `light.yml` as the default file name.
 """
@@ -270,8 +270,8 @@ end
 """
     convertwave!(η, ηx, ηy, η0, ηx0, ηy0, kbc)   
 
-Convert the surface wave geometry `η0', `ηx0', `ηy0' to  `η', `ηx', `ηy' with the same size as irradiance field. 
-Can be used for nonperiodic BC`kbc=1' (no interpolation) or periodic BC `kbc=0' (interpolation using FFT)
+Convert the surface wave geometry `η0`, `ηx0`, `ηy0` to  `η`, `ηx`, `ηy` with the same size as irradiance field. 
+Can be used for nonperiodic BC`kbc=1` (no interpolation) or periodic BC `kbc=0` (interpolation using FFT)
 """
 function convertwave!(η::Array{<:Float64,2},ηx::Array{<:Float64,2},ηy::Array{<:Float64,2},
                       η0::Array{<:AbstractFloat,2},ηx0::Array{<:AbstractFloat,2},ηy0::Array{<:AbstractFloat,2},kbc=0::Int64)    
@@ -474,7 +474,7 @@ end
 Doing the Monte Carlo Simulation.
 # Arguments
 - `ed::Array{<:Float64,3}`: Irradiance solution grid 
-- `esol::Array{<:Float64,2}`: 
+- `esol::Array{<:Float64,2}`: Irradiance solution grid for `solar` mode (under deverlopment)
 - `θ::Float64`: angle of the light ray relative to the z axis: polar angle.
 - `ϕ::Float64`: angle of the light ray relative to the x axis: azimuthal angle.
 - `fres::Float64`: fresnel coefficient or fractional transmission for unpolarized light
@@ -490,7 +490,7 @@ Doing the Monte Carlo Simulation.
 - `ph::Array{<:Float64,1}`: cumulation distribution of scattering angle (obtained from `phasePetzold()`)
 - `θps::Array{<:Float64,1}`: angle between new trajectory and the direction of the photon before scattering corresponding to each `ϕps` (obtained from `phasePetzold()`)
 - `p::Param`: simulation parameters.
-- `mode::Int64`:
+- `mode::Int64`: mode of different irradinace calculation (under deverlopment)
 """
 function transfer!(ed::Array{<:Float64,3},esol::Array{<:Float64,2},θ::Float64,ϕ::Float64,fres::Float64,ip::Int64,
                    xpb::Float64,ypb::Float64,zpb::Float64,area::Vector{Float64},interi::Vector{Int64},
@@ -677,8 +677,8 @@ Doing the Monte Carlo Simulation.
 - `edi::Array{<:Int64,1}`: x coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
 - `edj::Array{<:Int64,1}`: y coordination (grid number) of a single grid where a photon lands: from bottom left, bottom right, upper left, and upper right.
 - `edk::Array{<:Int64,1}`: number of the energy layer that the photons travel, from the top ztop in 1 by 4 array
-- `count::Array{<:Int64,1}`: dummy integer span from 1 to 4 to keep track of the size of the ed1d, edi, edj, edk.
-- `esol::Array{<:Float64,2}`:
+- `count::Array{<:Int64,1}`: (parrallel computing) dummy integer span from 1 to 4 to keep track of the size of the ed1d, edi, edj, edk. 
+- `esol::Array{<:Float64,2}`:  Irradiance solution grid for `solar` mode (under deverlopment)
 - `θ::Float64`: angle of the light ray relative to the z axis: polar angle.
 - `ϕ::Float64`: angle of the light ray relative to the x axis: azimuthal angle.
 - `fres::Float64`: fresnel coefficient or fractional transmission for unpolarized light.
@@ -691,7 +691,7 @@ Doing the Monte Carlo Simulation.
 - `ph::Array{<:Float64,1}`: cumulation distribution of scattering angle (obtained from `phasePetzold()`)
 - `θps::Array{<:Float64,1}`: angle between new trajectory and the direction of the photon before scattering corresponding to each `ϕps` (obtained from `phasePetzold()`)
 - `p::Param`: simulation parameters.
-- `mode::Int64`: 
+- `mode::Int64`: mode of different irradinace calculation (under deverlopment)
 """
 function transfer!(ed1d::Array{<:Float64,1},edi::Array{<:Int64,1},edj::Array{<:Int64,1},
                    edk::Array{<:Int64,1},count::Array{<:Int64,1},esol::Array{<:Float64,2},θ::Float64,ϕ::Float64,fres::Float64,

@@ -4,7 +4,7 @@ The basis of Monte Carlo method lies in the idea that, if we know the probabilit
 events, then we can determine the probability that the entire sequence of events will occur [^1]. In the simulation of light within the water, each photon, after being transmitted into the water, travels in the medium, interacts with the molecule: absorb and scatter, and either being fully absorbed or reaches the measurement devices. With the multiple photons, we can determine the distribution of the light field. 
 
 ```@raw html
-<img src="../../src/assets/IllustrationOfMonteCarloMethod.png" width="1000" align="center"/>
+<img src="../../build/assets/IllustrationOfMonteCarloMethod.png" width="1000" align="center"/>
 ```
 *Illustration of three photons that are being emitted and travel inside the water medium*[^1]
 
@@ -38,7 +38,7 @@ Azimuthal angle ``\varphi`` is uniformly distribute between 0 and ``2\pi`` hence
 The angle between new trajectory and the direction before scattering ``\theta`` is defined by the cumulative distribution, based on the experiment conducted by the Petzold(1972). [^2]
 
 ```@raw html
-<img src="../../src/assets/CDF_scattering_angle.png" width="1000" align="center"/>
+<img src="../../build/assets/CDF_scattering_angle.png" width="1000" align="center"/>
 ```
 *Cumulative Distribution Function of the polar angle or the angle between new trajectory and the direction before scattering ``\theta`` based on the data from Kirk(1981)*[^3]
 
