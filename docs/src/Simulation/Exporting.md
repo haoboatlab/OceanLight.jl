@@ -19,7 +19,6 @@ If specified `3D` mode, in addition to the data from `2D` mode, OceanLight.jl wi
 
 If specified `full` mode, in addition to the data from `3D` mode, OceanLight.jl will stored the physical coordination of the `ed` solution. 
 
-
 ```@docs
 exported(ed::Array{<:Real,3},η::Array{<:Real,2},p::Param,
                   fname::String,mode="2D"::String,nk=0::Int64)
