@@ -1,6 +1,7 @@
 # OceanLight.jl
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://haoboatlab.github.io/OceanLight.jl/dev/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://mit-license.org/)
 
 ## Overview
 
