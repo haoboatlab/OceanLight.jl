@@ -4,6 +4,9 @@ makedocs(
     sitename="OceanLight.jl", format = Documenter.HTML(prettyurls = false),
     pages = [
         "Home" => "index.md",
+        "Quick Start" => [
+        "Photons at the center" => "QuickStart/Center.md"
+        ],
         "Module" => [
         "Parameters" => "module/Parameters.md",
         "Refraction" => "module/refraction.md",
