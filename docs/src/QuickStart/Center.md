@@ -51,14 +51,22 @@ OceanLight.readparams()
 
 ## Air-Water Interaction
 
+During the air-water interaction process, OceanLight simulates the photons transfer directly downward from the air side, interacts with the water surface, and transfer down into water medium. In addition to information inside structure `param`, users need to identify the surface elevation information: η; surface elevation, ηx; paritial derivation of η in x direction, and ηy; paritial derivation of η in y direction. 
 
-
+The input value of η, ηx, and ηy need to have the same dimension with the incoming photons' grid. User can generate random surface elevation information with `OceanLight.setwave!`, or provided specific data. OceanLight can map the user's provided data of {η0,ηx0,ηy0} in different dimension onto the input value of {η,ηx,ηy} with `OceanLight.convertwave!`.
 ```@example Center
 η = zeros(p.nxs,p.nys)
 ηx = zeros(p.nxs,p.nys)
 ηy = zeros(p.nxs,p.nys)
+
+η0 = zeros(p.nxs,p.nys)
+ηx0 = zeros(p.nxs,p.nys)
+ηy0 = zeros(p.nxs,p.nys)
+
+OceanLight.convertwave!(η,ηx,ηy,η0,ηx0,ηy0,p.kbc)  
 ```
 
+After photons' interaction with the surface, OceanLight requires the information of specific coordinate of photon in cartesian grid {xpb,ypb,zpb}, the direction in which photon will travel in polar coordinate {θ,ϕ}, and the fraction of light that transmit through the water {fres}: all in the dimension of incoming photon grid size. 
 ```@example Center
 xpb = zeros(p.nxp,p.nyp)
 ypb = zeros(p.nxp,p.nyp)
@@ -68,8 +76,9 @@ zpb = zeros(p.nxp,p.nyp)
 fres = zeros(zeros(p.nxp,p.nyp))
 ```
 
+With all the input and output variable specified, OceanLight calculate the interaction with `OceanLight.interface!`
 ```@example Center
-oceanlight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
+OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 ```
 
 ## Monte Carlo simulation
@@ -78,21 +87,28 @@ oceanlight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 ed = zeros(p.nx, p.ny, pr.nz)
 esol = zeros(p.num, p.nz)
 randrng = MersenneTwister(1234)
-area=zeros(4)
-interi=zeros(Int64,4)
-interj=zeros(Int64,4)
-ix=div(p.nxη,2)+1
-iy=div(p.nyη,2)+1
+area = zeros(4)
+interi = zeros(Int64,4)
+interj = zeros(Int64,4)
+ix = div(p.nxη,2)+1
+iy = div(p.nyη,2)+1
+ϕps,θps = OceanLight.phasePetzold()
+```
 
-@time begin
-    for ind=1:p.nphoton
-        ip=allind[ind]
-        OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
+```@example Center
+for ind = 1:p.nphoton
+    ip = allind[ind]
+    OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
         ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,parameter,1)
-    end
 end
 ```
 
 ```@example Center
+OceanLight.applybc!(ed,p)
+```
 
+## Export data
+
+```@example Center
+exported(ed,η,p,"ed","3D",176)
 ```

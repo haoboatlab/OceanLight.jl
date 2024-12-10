@@ -1,4 +1,4 @@
-# Air-Water Interaction
+# Air-water interaction
 
 This section describes the function that can be used for the light interaction between the atmosphere and water. This section can be skipped entirely, if the simulation only considered the light within the water medium.
 

@@ -1,9 +1,9 @@
 # Refraction 
 
-Photons refraction between air and water 
+To calculate the refraction of the photons between two medium: air and water, OceanLight.jl expands the Snell's Law into three dimension spherical coordinate, with $\theta_{t}$ denotes the transmission angle beneath the surface, and $\varphi$ denotes the azimuth angle. In addition to the photons' path, OceanLight.jl calculates the fraction of light that is being reflected back to the air side, via Fresnel reflectance. 
 
 ## Snell's Law 
-angle of reflection [^1]
+The angle of reflection describes through the vector analysis, [^1]
 ```math
 \theta_{r} = \cos^{-1}|\hat{\xi}'\cdot\hat{n}|
 ```
@@ -17,7 +17,7 @@ Therefore, the angle of reflection, in this module, can be described by
 \theta_{r} = \cos^{-1}\left(\frac{1}{\sqrt{1+\left(\eta_{x}\right)^{2}+\left(\eta_{y}\right)^{2}}}\right)
 ```
 
-angle of transmission
+The angle of transmission can be described by Snell's Law,
 ```math
 \theta_{t} = \sin^{-1}\left(\frac{1}{n_{w}}\sin\theta_{r}\right)
 ```
@@ -27,14 +27,14 @@ Substitute the ``\theta_{r}`` that we found above.
 ```
 
 
-## Fresnel Reflectance 
+## Fresnel reflectance 
 
 In our package, we calculate the energy proportion of the light ray that being transmitted to the water, but first we identify the amplitude transmission coefficient or the ratio between electric field amplitude of the transmitted light ray to the intirial light ray. [^2]
 ```math
-t_{\perp}=\left\(\frac{E_{t}}{E_{0}}\right\)_{\perp}=\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin{\theta_{t}+\theta_{r}}}
+t_{\perp} = \left(\frac{E_t}{E_0}\right)_{\perp} = \frac{2\sin(\theta_t)\cos(\theta_r)}{\sin(\theta_t+\theta_r)}
 ```
 ```math
-t_{\parallel}=\left\(\frac{E_{t}}{E_{0}}\right\)_{\parallel}=\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin{\theta_{t}+\theta_{r}}\cos{\theta_{r}-\theta_{t}}}
+t_{\parallel} = \left(\frac{E_t}{E_0}\right)_{\parallel} = \frac{2\sin(\theta_t)\cos(\theta_r)}{\sin(\theta_t+\theta_r)\cos(\theta_r-\theta_t)}
 ```
 When ``t_{\perp}`` is corresponding to the amplitude transmission coefficient of the light ray in which the electric field, that constitute the electro magnetic wave, perpendicular to the plane-of-incident , and ``t_{\parallel}`` is corresponding to the amplitude transmission coefficient of the light ray in which the electric field, that constitute the electro magnetic wave, parallels to the plane-of-incident.
 
@@ -45,7 +45,7 @@ All conceivable azimuths of waves that are polarized combine to form natural or 
 t = \frac{I_{t}}{I_{0}} = \frac{1}{2}\left\{\left[\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin(\theta_{r}+\theta_{t})}\right]^2+\left[\frac{2\sin(\theta_{t})\cos(\theta_{r})}{\sin(\theta_{r}+\theta_{t})\cos(\theta_{r}-\theta_{t})}\right]^2\right\}
 ```
 
-## result  
+## Result  
 
 From the principle of least time, the path in which light travels is the path that can traveled in the least time. Hence, the incident, transmitted light ray, and the normal vector to the water surface lie in the same plane. The normal vector to the plane can be described by the cross product between incident light ray and normal vector to the water surface. When the light ray travels downward, along the z-axis, the z-axis lies on the plane, and hence, the plane is perpendicular to the xy plane. The transmitted light ray lies on the opposite side of the normal vector to the water surface. The normal vector to the water surface can be described by, ``\hat{n}_{xy}=\frac{1}{\sqrt{\eta_{x}^2+\eta_{y}^2}}\begin{bmatrix}-\eta_{x}\\-\eta_{y}\\0\end{bmatrix}```, and the angle of this vector to the x-axis is, 
 
