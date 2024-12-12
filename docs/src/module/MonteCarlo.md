@@ -1,7 +1,6 @@
 # Fundamental Principle of Monte Carlo simulation
 
-The basis of Monte Carlo method lies in the idea that, if we know the probability of occurence of each separate event in a sequence of 
-events, then we can determine the probability that the entire sequence of events will occur [^1]. In the simulation of light within the water, each photon, after being transmitted into the water, travels in the medium, interacts with the molecule: absorb and scatter, and either being fully absorbed or reaches the measurement devices. With the multiple photons, we can determine the distribution of the light field. 
+The basis of Monte Carlo method lies in the idea that, if we know the probability of occurence of each separate event in a sequence of events, then we can determine the probability that the entire sequence of events will occur [^1]. In the simulation of light within the water, each photon, after being transmitted into the water, travels in the medium, interacts with the molecule: absorb and scatter, and either being fully absorbed or reaches the measurement devices. With the multiple photons, we can determine the distribution of the light field. 
 
 ![Illustration of Monte Carlo Method](../../build/assets/IllustrationOfMonteCarloMethod.png)
 

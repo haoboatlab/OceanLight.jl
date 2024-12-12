@@ -45,7 +45,7 @@ data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>zto
             "wave"=>Dict("pex"=>pex,"pey"=>pey,"nxeta"=>nxeta,"nyeta"=>nyeta),
             "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc))
 
-OceanLight.writeparams() 
+OceanLight.writeparams(data) 
 OceanLight.readparams() 
 ```
 
@@ -83,8 +83,12 @@ OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 
 ## Monte Carlo simulation
 
+`OceanLight` simulates the photon traveling inside the water medium, given its initial position {xpb,ypb,zpb} and the direction it started with {θ,ϕ}. Once photons are inside the water, `OceanLight` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
+
+Users need to specify these variables and corresponding dimension. The detail on meaning of each input variables can be found here (insert example block). 
+
 ```@example Center
-ed = zeros(p.nx, p.ny, pr.nz)
+ed = zeros(p.nx, p.ny, p.nz)
 esol = zeros(p.num, p.nz)
 randrng = MersenneTwister(1234)
 area = zeros(4)
@@ -95,20 +99,23 @@ iy = div(p.nyη,2)+1
 ϕps,θps = OceanLight.phasePetzold()
 ```
 
+The `transfer!` function simulate a single photon path and store its irradiance value on the grid `ed`. Hence, to simulate multiple photons, users need to loop the `transfer!` function and giving the input of an individual photon's number `ip`. Thus, `OceanLight` could facilitate parallel computation. 
+
 ```@example Center
-for ind = 1:p.nphoton
-    ip = allind[ind]
+for ip = 1:p.nphoton
     OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
         ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,parameter,1)
 end
 ```
 
+Lastly, once the field `ed` is obtained. The `applybc!` apply and ensure the boundary condition of the `ed`. 
 ```@example Center
 OceanLight.applybc!(ed,p)
 ```
 
 ## Export data
 
+`OceanLight` exported the irradiance field `ed` and its statistics in `.h5` file. Detail on each specific input and the mode can be found here (insert example block). 
 ```@example Center
-exported(ed,η,p,"ed","3D",176)
+OceanLight.exported(ed,η,p,"ed","3D",176)
 ```
