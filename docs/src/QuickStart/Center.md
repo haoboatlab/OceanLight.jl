@@ -46,7 +46,7 @@ data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>zto
             "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc))
 
 OceanLight.writeparams(data) 
-OceanLight.readparams() 
+p = OceanLight.readparams() 
 ```
 
 ## Air-Water Interaction
@@ -118,4 +118,8 @@ OceanLight.applybc!(ed,p)
 `OceanLight` exported the irradiance field `ed` and its statistics in `.h5` file. Detail on each specific input and the mode can be found here (insert example block). 
 ```@example Center
 OceanLight.exported(ed,η,p,"ed","3D",176)
+```
+
+```@example Center
+heatmap(ed[:,:,30])
 ```
