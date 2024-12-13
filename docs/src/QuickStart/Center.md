@@ -13,7 +13,7 @@ using OceanLight
 All input variables required by OceanLight can be separated into 3 categories: Irradiance; setting up the Monte Carlo simulation grid field, 
 Photon; number of photons and optical properties of the water, and Wave; structure of surface wave field. 
 
-The detail on physical meaning of each input variables can be found here [ModelSetup](@ref). 
+The detail on physical meaning of each input variables can be found here [Simulation.ModelSetup](@ref). 
 
 ```@example Center
 # irradiance
@@ -79,7 +79,7 @@ OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 
 `OceanLight` simulates the photon traveling inside the water medium, given its initial position {xpb,ypb,zpb} and the direction it started with {θ,ϕ}. Once photons are inside the water, `OceanLight` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
 
-Users need to specify these variables and corresponding dimension. The detail on meaning of each input variables can be found [WithinWater](@ref). 
+Users need to specify these variables and corresponding dimension. The detail on meaning of each input variables can be found [Simulation.WithinWater](@ref). 
 
 ```@example Center
 using Random
