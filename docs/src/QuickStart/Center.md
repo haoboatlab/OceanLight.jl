@@ -100,7 +100,7 @@ The `transfer!` function simulate a single photon path and store its irradiance 
 ```@example Center
 for ip = 1:p.nphoton
     OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
-        ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,parameter,1)
+        ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,p,1)
 end
 ```
 
