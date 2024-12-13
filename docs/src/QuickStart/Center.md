@@ -106,11 +106,3 @@ Lastly, once the field `ed` is obtained. The `applybc!` apply and ensure the bou
 ```@example Center
 OceanLight.applybc!(ed,p)
 ```
-
-## Export data
-
-`OceanLight` exported the irradiance field `ed` and its statistics in `.h5` file. \
-
-```@example Center
-OceanLight.exported(ed,η,p,"ed","3D",0)
-```
