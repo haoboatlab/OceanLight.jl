@@ -67,7 +67,7 @@ ypb = zeros(p.nxp,p.nyp)
 zpb = zeros(p.nxp,p.nyp)
 θ = zeros(p.nxp,p.nyp)
 ϕ = zeros(p.nxp,p.nyp)
-fres = zeros(zeros(p.nxp,p.nyp))
+fres = zeros(p.nxp,p.nyp)
 ```
 
 With all the input and output variable specified, OceanLight calculate the interaction with `OceanLight.interface!`
@@ -115,7 +115,7 @@ OceanLight.exported(ed,η,p,"ed","3D",176)
 ```
 
 ```@example Center
-heatmap(p.x, p.y, ed[:,:,30], clim = [-20,0];cbar_title="\$\\log(I_{0})\$")
+heatmap(p.x, p.y, ed[:,:,30], clim = [-20,0]; cbar_title="\$\\log(I_{0})\$")
 xlabel!("\$x(m)\$")
 ylabel!("\$y(m)\$")
 plot!(size=(800,400))
