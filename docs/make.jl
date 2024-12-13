@@ -1,7 +1,7 @@
 using Documenter, OceanLight
 
 makedocs(
-    sitename="OceanLight.jl", format = Documenter.HTML(prettyurls = true),
+    sitename="OceanLight.jl", format = Documenter.HTML(),
     pages = [
         "Home" => "index.md",
         "Quick Start" => [
