@@ -58,12 +58,6 @@ The input value of η, ηx, and ηy need to have the same dimension with the inc
 η = zeros(p.nxs,p.nys)
 ηx = zeros(p.nxs,p.nys)
 ηy = zeros(p.nxs,p.nys)
-
-η0 = zeros(p.nxs,p.nys)
-ηx0 = zeros(p.nxs,p.nys)
-ηy0 = zeros(p.nxs,p.nys)
-
-OceanLight.convertwave!(η,ηx,ηy,η0,ηx0,ηy0,p.kbc)  
 ```
 
 After photons' interaction with the surface, OceanLight requires the information of specific coordinate of photon in cartesian grid {xpb,ypb,zpb}, the direction in which photon will travel in polar coordinate {θ,ϕ}, and the fraction of light that transmit through the water {fres}: all in the dimension of incoming photon grid size. 
@@ -121,5 +115,8 @@ OceanLight.exported(ed,η,p,"ed","3D",176)
 ```
 
 ```@example Center
-heatmap(ed[:,:,30])
+heatmap(p.x, p.y, ed[:,:,30], clim = [-20,0];cbar_title="\$\\log(I_{0})\$")
+xlabel!("\$x(m)\$")
+ylabel!("\$y(m)\$")
+plot!(size=(800,400))
 ```
