@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Photons at the center · OceanLight.jl</title><meta name="title" content="Photons at the center · OceanLight.jl"/><meta property="og:title" content="Photons at the center · OceanLight.jl"/><meta property="twitter:title" content="Photons at the center · OceanLight.jl"/><meta name="description" content="Documentation for OceanLight.jl."/><meta property="og:description" content="Documentation for OceanLight.jl."/><meta property="twitter:description" content="Documentation for OceanLight.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">OceanLight.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Quick Start</span><ul><li class="is-active"><a class="tocitem" href>Photons at the center</a><ul class="internal"><li><a class="tocitem" href="#Initial-Condition"><span>Initial Condition</span></a></li><li><a class="tocitem" href="#Air-Water-Interaction"><span>Air-Water Interaction</span></a></li><li><a class="tocitem" href="#Monte-Carlo-simulation"><span>Monte Carlo simulation</span></a></li></ul></li></ul></li><li><span class="tocitem">Module</span><ul><li><a class="tocitem" href="../../module/Parameters/">Parameters</a></li><li><a class="tocitem" href="../../module/refraction/">Refraction</a></li><li><a class="tocitem" href="../../module/MonteCarlo/">Monte Carlo Simulation</a></li></ul></li><li><span class="tocitem">Simulation</span><ul><li><a class="tocitem" href="../../Simulation/ModelSetup/">Model Setup</a></li><li><a class="tocitem" href="../../Simulation/AirWaveInteract/">Air-Water Interaction</a></li><li><a class="tocitem" href="../../Simulation/WithinWater/">Light within Water</a></li><li><a class="tocitem" href="../../Simulation/Exporting/">Exporting data</a></li></ul></li><li><a class="tocitem" href="../../reference/">Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Quick Start</a></li><li class="is-active"><a href>Photons at the center</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Photons at the center</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/haoboatlab/OceanLight.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/haoboatlab/OceanLight.jl/blob/main/docs/src/QuickStart/Center.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Quick-Start"><a class="docs-heading-anchor" href="#Quick-Start">Quick Start</a><a id="Quick-Start-1"></a><a class="docs-heading-anchor-permalink" href="#Quick-Start" title="Permalink"></a></h1><p>First, we install the OceanLight package.</p><pre><code class="language-julia hljs">using Pkg
+Pkg.add(&quot;OceanLight&quot;)
+using OceanLight</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    Updating registry at `~/.julia/registries/General.toml`
+   Resolving package versions...
+   Installed OceanLight ─ v1.0.0
+    Updating `~/work/OceanLight.jl/OceanLight.jl/docs/Project.toml`
+  [ff88e13d] ~ OceanLight v1.0.0 `~/work/OceanLight.jl/OceanLight.jl` ⇒ v1.0.0
+    Updating `~/work/OceanLight.jl/OceanLight.jl/docs/Manifest.toml`
+  [ff88e13d] ~ OceanLight v1.0.0 `~/work/OceanLight.jl/OceanLight.jl` ⇒ v1.0.0
+Precompiling project...
+   1616.4 ms  ✓ OceanLight
+  1 dependency successfully precompiled in 2 seconds. 76 already precompiled.
+  1 dependency precompiled but a different version is currently loaded. Restart julia to access the new version</code></pre><h2 id="Initial-Condition"><a class="docs-heading-anchor" href="#Initial-Condition">Initial Condition</a><a id="Initial-Condition-1"></a><a class="docs-heading-anchor-permalink" href="#Initial-Condition" title="Permalink"></a></h2><p>All input variables required by OceanLight can be separated into 3 categories: Irradiance; setting up the Monte Carlo simulation grid field,  Photon; number of photons and optical properties of the water, and Wave; structure of surface wave field. </p><pre><code class="language-julia hljs"># irradiance
+nz = 200
+dz = 1
+nxe = 512
+nye = 512
+num = 31
+ztop = 10
+# photon
+nphoton = 100000
+kr = 10
+nxp = 512
+kbc = 0
+b = 0.006
+nyp = 512
+a = 0.007
+# wave
+pey = 0.07853981633974483
+nxeta = 512
+nyeta = 512
+pex = 0.07853981633974483</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.07853981633974483</code></pre><p>OceanLight accesses all input variable in the <code>Param</code> structure, throught the build-in function <code>readparams()</code> that access our input variable in <code>.yml</code> format. The build-in function <code>writeparams()</code> will take the input of <code>dict</code> format and produce the <code>.yml</code> format. </p><pre><code class="language-julia hljs">data=Dict(&quot;irradiance&quot;=&gt;Dict(&quot;nxe&quot;=&gt;nxe,&quot;nye&quot;=&gt;nye,&quot;nz&quot;=&gt;nz,&quot;dz&quot;=&gt;dz,&quot;ztop&quot;=&gt;ztop,&quot;num&quot;=&gt;num),
+            &quot;wave&quot;=&gt;Dict(&quot;pex&quot;=&gt;pex,&quot;pey&quot;=&gt;pey,&quot;nxeta&quot;=&gt;nxeta,&quot;nyeta&quot;=&gt;nyeta),
+            &quot;photon&quot;=&gt;Dict(&quot;nxp&quot;=&gt;nxp,&quot;nyp&quot;=&gt;nyp,&quot;nphoton&quot;=&gt;nphoton,&quot;a&quot;=&gt;a,&quot;b&quot;=&gt;b,&quot;kr&quot;=&gt;kr,&quot;kbc&quot;=&gt;kbc))
+
+OceanLight.writeparams(data)
+p = OceanLight.readparams()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Param(513, 513, 512, 512, 31, 200, [0.0, 0.15625, 0.3125, 0.46875, 0.625, 0.78125, 0.9375, 1.09375, 1.25, 1.40625  …  78.59375, 78.75, 78.90625, 79.0625, 79.21875, 79.375, 79.53125, 79.6875, 79.84375, 80.0], [0.0, 0.15625, 0.3125, 0.46875, 0.625, 0.78125, 0.9375, 1.09375, 1.25, 1.40625  …  78.59375, 78.75, 78.90625, 79.0625, 79.21875, 79.375, 79.53125, 79.6875, 79.84375, 80.0], [9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0  …  -181.0, -182.0, -183.0, -184.0, -185.0, -186.0, -187.0, -188.0, -189.0, -190.0], 0.07853981633974483, 0.07853981633974483, 0.15625, 0.15625, 1.0, 10.0, 0.0, 80.0, 0.0, 80.0, 80.0, 80.0, 513, 513, 512, 512, 512, 512, 100000, 0, 0.007, 0.006, 10.0, 0.15625, 0.15625)</code></pre><h2 id="Air-Water-Interaction"><a class="docs-heading-anchor" href="#Air-Water-Interaction">Air-Water Interaction</a><a id="Air-Water-Interaction-1"></a><a class="docs-heading-anchor-permalink" href="#Air-Water-Interaction" title="Permalink"></a></h2><p>During the air-water interaction process, OceanLight simulates the photons transfer directly downward from the air side, interacts with the water surface, and transfer down into water medium. In addition to information inside structure <code>param</code>, users need to identify the surface elevation information: η; surface elevation, ηx; paritial derivation of η in x direction, and ηy; paritial derivation of η in y direction. </p><p>The input value of η, ηx, and ηy need to have the same dimension with the incoming photons&#39; grid. User can generate random surface elevation information with <code>OceanLight.setwave!</code>, or provided specific data. OceanLight can map the user&#39;s provided data of {η0,ηx0,ηy0} in different dimension onto the input value of {η,ηx,ηy} with <code>OceanLight.convertwave!</code>.</p><pre><code class="language-julia hljs">η = zeros(p.nxs,p.nys)
+ηx = zeros(p.nxs,p.nys)
+ηy = zeros(p.nxs,p.nys)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">513×513 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ ⋮                        ⋮              ⋱                      ⋮         
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0</code></pre><p>After photons&#39; interaction with the surface, OceanLight requires the information of specific coordinate of photon in cartesian grid {xpb,ypb,zpb}, the direction in which photon will travel in polar coordinate {θ,ϕ}, and the fraction of light that transmit through the water {fres}: all in the dimension of incoming photon grid size. </p><pre><code class="language-julia hljs">xpb = zeros(p.nxp,p.nyp)
+ypb = zeros(p.nxp,p.nyp)
+zpb = zeros(p.nxp,p.nyp)
+θ = zeros(p.nxp,p.nyp)
+ϕ = zeros(p.nxp,p.nyp)
+fres = zeros(p.nxp,p.nyp)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">512×512 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ ⋮                        ⋮              ⋱  ⋮                        ⋮    
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0</code></pre><p>With all the input and output variable specified, OceanLight calculate the interaction with <code>OceanLight.interface!</code>.</p><pre><code class="language-julia hljs">OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)</code></pre><h2 id="Monte-Carlo-simulation"><a class="docs-heading-anchor" href="#Monte-Carlo-simulation">Monte Carlo simulation</a><a id="Monte-Carlo-simulation-1"></a><a class="docs-heading-anchor-permalink" href="#Monte-Carlo-simulation" title="Permalink"></a></h2><p><code>OceanLight</code> simulates the photon traveling inside the water medium, given its initial position {xpb,ypb,zpb} and the direction it started with {θ,ϕ}. Once photons are inside the water, <code>OceanLight</code> will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid <code>ed</code>. </p><p>Users need to specify these variables and corresponding dimension. </p><pre><code class="language-julia hljs">using Random
+
+ed = zeros(p.nx, p.ny, p.nz)
+esol = zeros(p.num, p.nz)
+randrng = MersenneTwister(1234)
+area = zeros(4)
+interi = zeros(Int64,4)
+interj = zeros(Int64,4)
+ix = div(p.nxη,2)+1
+iy = div(p.nyη,2)+1
+ϕps,θps = OceanLight.phasePetzold()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">([0.517, 0.666, 0.751, 0.811, 0.851, 0.879, 0.901, 0.918, 0.931, 0.942  …  0.995, 0.996, 0.9968, 0.9976, 0.9982, 0.9988, 0.9992, 0.9997, 0.9998, 1.0], [0.04363323129985824, 0.1308996938995747, 0.2181661564992912, 0.30543261909900765, 0.39269908169872414, 0.4799655442984406, 0.5672320068981571, 0.6544984694978736, 0.7417649320975901, 0.8290313946973066  …  2.3125612588924866, 2.399827721492203, 2.48709418409192, 2.5743606466916362, 2.6616271092913526, 2.748893571891069, 2.8361600344907854, 2.9234264970905017, 3.0106929596902186, 3.097959422289935])</code></pre><p>The <code>transfer!</code> function simulate a single photon path and store its irradiance value on the grid <code>ed</code>. Hence, to simulate multiple photons, users need to loop the <code>transfer!</code> function and giving the input of an individual photon&#39;s number <code>ip</code>. Thus, <code>OceanLight</code> could facilitate parallel computation. </p><pre><code class="language-julia hljs">for ip = 1:p.nphoton
+    OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
+        ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,p,1)
+end</code></pre><p>Lastly, once the field <code>ed</code> is obtained. The <code>applybc!</code> apply and ensure the boundary condition of the <code>ed</code>. </p><pre><code class="language-julia hljs">OceanLight.applybc!(ed,p)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Home</a><a class="docs-footer-nextpage" href="../../module/Parameters/">Parameters »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Friday 13 December 2024 21:17">Friday 13 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
