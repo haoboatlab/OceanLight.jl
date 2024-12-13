@@ -82,6 +82,8 @@ OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 Users need to specify these variables and corresponding dimension. The detail on meaning of each input variables can be found here (insert example block). 
 
 ```@example Center
+using Random
+
 ed = zeros(p.nx, p.ny, p.nz)
 esol = zeros(p.num, p.nz)
 randrng = MersenneTwister(1234)
@@ -115,6 +117,8 @@ OceanLight.exported(ed,η,p,"ed","3D",176)
 ```
 
 ```@example Center
+using Plots
+
 heatmap(p.x, p.y, ed[:,:,30], clim = [-20,0]; cbar_title="\$\\log(I_{0})\$")
 xlabel!("\$x(m)\$")
 ylabel!("\$y(m)\$")
