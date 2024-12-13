@@ -13,7 +13,7 @@ using OceanLight
 All input variables required by OceanLight can be separated into 3 categories: Irradiance; setting up the Monte Carlo simulation grid field, 
 Photon; number of photons and optical properties of the water, and Wave; structure of surface wave field. 
 
-The detail on physical meaning of each input variables can be found here (insert example block). 
+The detail on physical meaning of each input variables can be found here [ModelSetup](@ref). 
 
 ```@example Center
 # irradiance
@@ -70,7 +70,7 @@ zpb = zeros(p.nxp,p.nyp)
 fres = zeros(p.nxp,p.nyp)
 ```
 
-With all the input and output variable specified, OceanLight calculate the interaction with `OceanLight.interface!`
+With all the input and output variable specified, OceanLight calculate the interaction with `OceanLight.interface!`.
 ```@example Center
 OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 ```
@@ -79,7 +79,7 @@ OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 
 `OceanLight` simulates the photon traveling inside the water medium, given its initial position {xpb,ypb,zpb} and the direction it started with {θ,ϕ}. Once photons are inside the water, `OceanLight` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
 
-Users need to specify these variables and corresponding dimension. The detail on meaning of each input variables can be found here (insert example block). 
+Users need to specify these variables and corresponding dimension. The detail on meaning of each input variables can be found [WithinWater](@ref). 
 
 ```@example Center
 using Random
@@ -111,16 +111,8 @@ OceanLight.applybc!(ed,p)
 
 ## Export data
 
-`OceanLight` exported the irradiance field `ed` and its statistics in `.h5` file. Detail on each specific input and the mode can be found here (insert example block). 
-```@example Center
-OceanLight.exported(ed,η,p,"ed","3D",176)
-```
+`OceanLight` exported the irradiance field `ed` and its statistics in `.h5` file. Detail on each specific input and the mode can be found [`exported`](@ref). 
 
 ```@example Center
-using Plots
-
-heatmap(p.x, p.y, ed[:,:,30], clim = [-20,0]; cbar_title="\$\\log(I_{0})\$")
-xlabel!("\$x(m)\$")
-ylabel!("\$y(m)\$")
-plot!(size=(800,400))
+OceanLight.exported(ed,η,p,"ed","3D",0)
 ```
