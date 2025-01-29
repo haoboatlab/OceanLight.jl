@@ -4,7 +4,7 @@ First, we install the OceanLight package.
 cd(mktempdir()) # hide
 
 using Pkg 
-Pkg.add("OceanLight")
+Pkg.add("OceanLight");
 using OceanLight 
 ```
 
@@ -41,10 +41,10 @@ The build-in function `writeparams()` will take the input of `dict` format and p
 ```@example Center
 data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>ztop,"num"=>num),
             "wave"=>Dict("pex"=>pex,"pey"=>pey,"nxeta"=>nxeta,"nyeta"=>nyeta),
-            "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc))
+            "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc));
 
-OceanLight.writeparams(data) 
-p = OceanLight.readparams() 
+OceanLight.writeparams(data);
+p = OceanLight.readparams();
 ```
 
 ## Air-Water Interaction
@@ -53,24 +53,24 @@ During the air-water interaction process, OceanLight simulates the photons trans
 
 The input value of η, ηx, and ηy need to have the same dimension with the incoming photons' grid. User can generate random surface elevation information with `OceanLight.setwave!`, or provided specific data. OceanLight can map the user's provided data of {η0,ηx0,ηy0} in different dimension onto the input value of {η,ηx,ηy} with `OceanLight.convertwave!`.
 ```@example Center
-η = zeros(p.nxs,p.nys)
-ηx = zeros(p.nxs,p.nys)
-ηy = zeros(p.nxs,p.nys)
+η = zeros(p.nxs,p.nys);
+ηx = zeros(p.nxs,p.nys);
+ηy = zeros(p.nxs,p.nys);
 ```
 
 After photons' interaction with the surface, OceanLight requires the information of specific coordinate of photon in cartesian grid {xpb,ypb,zpb}, the direction in which photon will travel in polar coordinate {θ,ϕ}, and the fraction of light that transmit through the water {fres}: all in the dimension of incoming photon grid size. 
 ```@example Center
-xpb = zeros(p.nxp,p.nyp)
-ypb = zeros(p.nxp,p.nyp)
-zpb = zeros(p.nxp,p.nyp)
-θ = zeros(p.nxp,p.nyp)
-ϕ = zeros(p.nxp,p.nyp)
-fres = zeros(p.nxp,p.nyp)
+xpb = zeros(p.nxp,p.nyp);
+ypb = zeros(p.nxp,p.nyp);
+zpb = zeros(p.nxp,p.nyp);
+θ = zeros(p.nxp,p.nyp);
+ϕ = zeros(p.nxp,p.nyp);
+fres = zeros(p.nxp,p.nyp);
 ```
 
 With all the input and output variable specified, OceanLight calculate the interaction with `OceanLight.interface!`.
 ```@example Center
-OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
+OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p);
 ```
 
 ## Monte Carlo simulation
@@ -82,15 +82,15 @@ Users need to specify these variables and corresponding dimension.
 ```@example Center
 using Random
 
-ed = zeros(p.nx, p.ny, p.nz)
-esol = zeros(p.num, p.nz)
-randrng = MersenneTwister(1234)
-area = zeros(4)
-interi = zeros(Int64,4)
-interj = zeros(Int64,4)
-ix = div(p.nxη,2)+1
-iy = div(p.nyη,2)+1
-ϕps,θps = OceanLight.phasePetzold()
+ed = zeros(p.nx, p.ny, p.nz);
+esol = zeros(p.num, p.nz);
+randrng = MersenneTwister(1234);
+area = zeros(4);
+interi = zeros(Int64,4);
+interj = zeros(Int64,4);
+ix = div(p.nxη,2)+1;
+iy = div(p.nyη,2)+1;
+ϕps,θps = OceanLight.phasePetzold();
 ```
 
 The `transfer!` function simulate a single photon path and store its irradiance value on the grid `ed`. Hence, to simulate multiple photons, users need to loop the `transfer!` function and giving the input of an individual photon's number `ip`. Thus, `OceanLight` could facilitate parallel computation. 

@@ -8,7 +8,7 @@
 
 ```@example
 using Pkg
-Pkg.add("OceanLight")
+Pkg.add("OceanLight");
 ```
 
 ## Result
