@@ -145,6 +145,7 @@ The result downwelling irradiance field $I(x,y,z)$ is in 3 dimension tensor, whe
 
 ```@example Center
 using Plots 
+using Plots.Measures
 
 l = @layout [grid(2,1) a{0.5w} ; b{0.5w}]
 
