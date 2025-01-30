@@ -153,7 +153,7 @@ p1 = heatmap(p.x .-40,p.y .-40,log.(ed[:,:,40]),clim=(-20,20),framestyle = :box,
     ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
 p2 = heatmap(p.x .-40,p.y .-40,log.(ed[:,:,160]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
     ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
-p3 = heatmap(p.x .-40,p.z ,reverse(log.(ed[:,256,:])),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+p3 = heatmap(p.x .-40,reverse(p.z) ,reverse(transpose(log.(ed[:,256,:]))),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
     ,xlabel="\$x(m)\$",ylabel="\$z(m)\$"
     ;cbar_title="\$\\ln(I(x,y,z))\$")
 plot(p1, p2,p3, layout = l,
