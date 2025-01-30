@@ -6,9 +6,13 @@
 
 ## Quick Install 
 
-```@example
+1. [Install Julia](https://julialang.org/downloads/)
+
+2. Launch Julia and type
+
+```julia
 using Pkg
-Pkg.add("OceanLight");
+Pkg.add("OceanLight")
 ```
 
 ## Result

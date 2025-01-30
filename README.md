@@ -11,11 +11,11 @@
 
 OceanLight requires Julia software. To do so, 
 
-1. [Download Julia](https://julialang.org/downloads/) 
+1. [Install Julia](https://julialang.org/downloads/) 
 
 2. Lauch Julia and type 
 
-```@example
+```Julia
 using Pkg
 Pkg.add("OceanLight")
 ```
