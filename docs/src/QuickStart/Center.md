@@ -46,9 +46,9 @@ nxeta = 512
 nyeta = 512
 pex = 0.07853981633974483
 ```
-To create a input variable file suitable for this package, user can either create a new file in `.yml` format, copy, and paste the code block above, or using a build-in function `OceanLihgt.writeparams` to automate the process. 
+To create a input variable file suitable for this package, user can either create a new file in `.yml` format, copy, and paste the code block above, or using a build-in function `OceanLight.writeparams` to automate the process. 
 
-The function `writeparams` converts the dictionary of input variables into the `light.yml` file. 
+The function `OceanLight.writeparams` converts the dictionary of input variables into the `light.yml` file. 
 
 ```@example Center
 data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>ztop,"num"=>num),
@@ -149,12 +149,12 @@ using Plots.Measures
 
 l = @layout [grid(2,1) a{0.5w} ; b{0.5w}]
 
-p1 = heatmap(p.x,p.y,log.(ed[:,:,40]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
-    ,ylimits=(-40,40),xlimits=(-40,40),legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
-p2 = heatmap(p.x,p.y,log.(ed[:,:,160]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
-    ,ylimits=(-40,40),xlimits=(-40,40),legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
-p3 = heatmap(p.x,p.z,reverse(transpose(log.(ed[:,256,:]))),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
-    ,ylimits=(-190,10),xlimits=(-40,40),xlabel="\$x(m)\$",ylabel="\$z(m)\$"
+p1 = heatmap(p.x .-40,p.y .-40,log.(ed[:,:,40]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+    ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
+p2 = heatmap(p.x .-40,p.y .-40,log.(ed[:,:,160]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+    ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
+p3 = heatmap(p.x .-40,reverse(p.z) ,reverse(transpose(log.(ed[:,256,:]))),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+    ,xlabel="\$x(m)\$",ylabel="\$z(m)\$"
     ;cbar_title="\$\\ln(I(x,y,z))\$")
 plot(p1, p2,p3, layout = l,
 title = ["($i)" for j in 1:1, i in ["a","b","c"]], titleloc = :left, titlefont = font(8)
