@@ -1,5 +1,5 @@
 ---
-title: OceanLight.jl: Monte Carlo simulation to calculate downwelling irradiance
+title: "OceanLight.jl: Monte Carlo simulation to calculate downwelling irradiance"
 tags:
   - Julia
   - Ocean
@@ -65,7 +65,7 @@ In both cases, the optical property of water is the same, with absorbance coeffi
 
 With the flat surface, most of the photons transmit directly at a right angle to the surface, based on the ratio given by the Fresnel equation. In the second case, we consider a more realistic scenario, with imported geometry based on the observed surface elevation and even distribution of incoming light. The spatial grid spacing of incoming photons is the same as `dx` and `dy` being used in the calculation grid. 
 
-![Simulation of 100 Photons at the every grid point with observed surface elevation. Sub-Figure a: irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. Sub-Figure b: irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. Sub-Figure c: irradiance field on the vertical plane at the center \label{fig:}](wholegrid1000.png)
+![Simulation of 100 Photons at the every grid point with observed surface elevation. Sub-Figure a: irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. Sub-Figure b: irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. Sub-Figure c: irradiance field on the vertical plane at the center \label{fig:}](Wholegrid1000.png)
 
 # Acknowledgement 
 
