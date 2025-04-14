@@ -15,15 +15,18 @@ using Pkg
 Pkg.add("OceanLight")
 ```
 
+After installing, verify that OceanLight works as intended by:
+
+```Julia
+Pkg.test("OceanLight")
+```
+
 ## Result
 
-```@raw html
-<img src="assets/center1e8.png" width="600" align="center"/>
-```
-*Simulation of 1e7 Photons at the center with no surface elevation, in 80 m by 80 m by 190 m physical size with 512 by 512 by 190 resolution, absorbtance coefficent a = 0.0196 and scattering coefficient b = 0.0031. Sub-Figure 1: X-Y cross section at 30 m depth. Sub-Figure 2: X-Y cross section at 150 m depth. Sub-Figure 3: X-Z cross section at the center.*
+<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Center1e8.png" width="600" align="center">
 
+*Simulation of $10^{8}$ Photons at the center of the flat surface. (a) irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) irradiance field on the vertical plane at the center.*
 
-```@raw html
-<img src="assets/WholeGrid1000.png" width="600" align="center"/>
-```
-*Simulation of 100 Photons at the every grid point with observed surface elevation, in 80 m by 80 m by 190 m physical size with 512 by 512 by 190 resolution, absorbtance coefficent a = 0.0196 and scattering coefficient b = 0.0031. Sub-Figure 1: X-Y cross section at 30 m depth. Sub-Figure 2: X-Y cross section at 150 m depth. Sub-Figure 3: X-Z cross section at the center.*
+<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Wholegrid1000.png" width="600" align="center">
+
+*Simulation of 1000 Photons at the every grid point with observed surface elevation. (a) irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) irradiance field on the vertical plane at the center.*

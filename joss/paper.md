@@ -59,13 +59,13 @@ To demonstrate the utilities of this package, we calculate the downwelling irrad
 
 * Imported geometry based on observed surface elevation, with light intensity distributed evenly across the entire spatial domain of size $x,y \in [\mathrm{−40m},\mathrm{40m}]$ ($10^{3}$ photons at every points)
 
-In both cases, the optical property of water is the same, with absorbance coefficient $a = 0.0196$ and scattering coefficient $b = 0.0031$, which represents the attenuation coefficient of sea water at wavelength $490\ \mathrm{nm}$ [Smith:1981]. The spatial grid size in both x and y directions is carefully chosen such that the lowest wave numbers that can be captured during the derivative of surface elevation is `pex` and `pey`. The downward irradiance is stored in a domain of $512 \times 512 \times 190 $ grid points, with a depth spatial domain of size $z \in [\mathrm{−190m},\mathrm{10m}]$. The periodic boundary condition is implemented on all sides. 
+In both cases, the optical property of water is the same, with absorbance coefficient $a = 0.0196$ and scattering coefficient $b = 0.0031$, which represents the attenuation coefficient of sea water at wavelength $490 \mathrm{nm}$ [Smith:1981]. The spatial grid size in both x and y directions is carefully chosen such that the lowest wave numbers that can be captured during the derivative of surface elevation is `pex` and `pey`. The downward irradiance is stored in a domain of $512 \times 512 \times 190$ grid points, with a depth spatial domain of size $z \in [\mathrm{−190m},\mathrm{10m}]$. The periodic boundary condition is implemented on all sides. 
 
-![Simulation of $10^{8}$ Photons at the center of the flat surface. Sub-Figure a: irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. Sub-Figure b: irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. Sub-Figure c: irradiance field on the vertical plane at the center \label{fig:}](Center1e8.png)
+![Simulation of $10^{8}$ Photons at the center of the flat surface. (a) irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) irradiance field on the vertical plane at the center. \label{fig:}](Center1e8.png)
 
 With the flat surface, most of the photons transmit directly at a right angle to the surface, based on the ratio given by the Fresnel equation. In the second case, we consider a more realistic scenario, with imported geometry based on the observed surface elevation and even distribution of incoming light. The spatial grid spacing of incoming photons is the same as `dx` and `dy` being used in the calculation grid. 
 
-![Simulation of 100 Photons at the every grid point with observed surface elevation. Sub-Figure a: irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. Sub-Figure b: irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. Sub-Figure c: irradiance field on the vertical plane at the center \label{fig:}](Wholegrid1000.png)
+![Simulation of 1000 Photons at the every grid point with observed surface elevation. (a) irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) irradiance field on the vertical plane at the center. \label{fig:}](Wholegrid1000.png)
 
 # Acknowledgement 
 
