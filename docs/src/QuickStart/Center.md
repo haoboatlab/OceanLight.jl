@@ -17,7 +17,7 @@ using Random
 
 ## Problem
 
-In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and a total of 100,000 photons is focused at a single point in the center. Our domain of interest is defined as \( x, y \in [-10\,\mathrm{m}, 10\,\mathrm{m}] \), and ``z \in \[\mathrm{-190m},\mathrm{10m}\]`` in depth, corresponding to a grid resolution of $512 \times 512 \times 200$  points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
+In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and a total of 100,000 photons is focused at a single point in the center. Our domain of interest is defined as ``x,y \in \[\mathrm{-10m},\mathrm{10m}\]``, and ``z \in \[\mathrm{-190m},\mathrm{10m}\]`` in depth, corresponding to a grid resolution of $512 \times 512 \times 200$  points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
 
 ##  Initial Condition 
 
@@ -150,6 +150,23 @@ Once the simulation is over, the downwelling irradiance field $I(x,y,z)$ is stor
 The result downwelling irradiance field $I(x,y,z)$ is in 3 dimension tensor, where the first two dimensions represent horizontal field, and the last represents the vertical field or depth. The first few depth layer represents the air phase, hence $I(x,y,z)$ is zeros, depending on how many layer specified as air phases `ztop`. To visualize using `Plots` julia package, users can try the example code below. 
 
 ```@example Center
+max_val, max_loc = findmax(ed)
+ed = ed./max_val
+nonzero_vals = ed[ed .! =0]
+min_val = minimum(nonzeros_vals)
+
+for i in 1:int(nxe+1)
+    for j in 1:int(nye+1)
+        for k in ztop:nz
+            if ed[i,j,k] == 0
+                ed[i,j,k] = min_val
+            end
+        end
+    end
+end
+```
+
+```@example Center
 using Plots 
 using Plots.Measures
 
@@ -161,7 +178,7 @@ p2 = heatmap(p.x .-10,p.y .-10,log.(ed[:,:,160]),clim=(-20,0),framestyle = :box,
     ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
 p3 = heatmap(p.x .-10,reverse(p.z) ,reverse(transpose(log.(ed[:,256,:]))),clim=(-20,0),framestyle = :box,grid = false, c =cgrad(:viridis)
     ,xlabel="\$x(m)\$",ylabel="\$z(m)\$"
-    ;cbar_title="\$\\ln(I(x,y,z))\$")
+    ;cbar_title="\$\\ln\\frac{I(x,y,z)}{I_{0}}\$")
 plot(p1, p2,p3, layout = l,
 title = ["($i)" for j in 1:1, i in ["a","b","c"]], titleloc = :left, titlefont = font(8)
 ,left_margin = [10mm 0mm],right_margin = [10mm 0mm])
