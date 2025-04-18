@@ -17,7 +17,7 @@ using Random
 
 ## Problem
 
-In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and the total of 100,000 photons is focusing only one point in the center. Our interested domain is ``x,y \in \[\mathrm{-10m},\mathrm{10m}\]``, whereas ``z \in \[\mathrm{-190m},\mathrm{10m}\]`` depth, which corresponding to $512 \times 512 \times 200$ grid points. The periodic boundary condition is implemented across the domain boundary. The attenuated coefficient of water is chosen at absorbance coefficient $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
+In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and a total of 100,000 photons is focused at a single point in the center. Our domain of interest is defined as \( x, y \in [-10\,\mathrm{m}, 10\,\mathrm{m}] \), and ``z \in \[\mathrm{-190m},\mathrm{10m}\]`` in depth, corresponding to a grid resolution of $512 \times 512 \times 200$  points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
 
 ##  Initial Condition 
 
@@ -50,7 +50,7 @@ nxeta = 512                 # Number of surface elevation grid point in x direct
 nyeta = 512                 # Number of surface elevation grid point in y direction
 pex = 2*pi/20.0              # Lowest wavenumber that can be captured during the derivative of surface elevation in y direction
 ```
-**NOTE:** `num` need to set constant at 31 (number of angle measurement in Kirk, 1981 [^2]). `kbc` only take binary value of 0 and 1 (Periodic BC). In contrary to grid spacing `dz` in z-direction, grid spacing in x and y direction `dx` and `dy` will be calculated automatically from `OceanLight.readparams`, where the calculation is $dx \times nxe  = \frac{2\pi}{pex}$, and $dy \times nye = \frac{2\pi}{pey}$. For more detail on all parameters being used can be access here [`Simulation parameters`](@ref). 
+**NOTE:** `num` must be set to a constant value of 31 (number of angle measurement in Kirk, 1981 [^2]). `kbc` accepts only binary values (0 or 1), representing periodic boundary conditions. In contrast to grid spacing `dz` in z-direction, , the grid spacings in the x- and y-directions (`dx` and `dy`) are calculated automatically by `OceanLight.readparams`,  using the formulas $dx \times nxe  = \frac{2\pi}{pex}$, and $dy \times nye = \frac{2\pi}{pey}$. For more detail on all parameters  used, see [`Simulation parameters`](@ref simulation_parameters). 
 
 To create a input variable file suitable for this package, user can either create a new file in `.yml` format, copy, and paste the code block above, or using a build-in function `OceanLight.writeparams` to automate the process. 
 
