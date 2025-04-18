@@ -17,7 +17,7 @@ using Random
 
 ## Problem
 
-In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and a total of 1,000,000 photons is focused at a single point in the center. Our domain of interest is defined as $x,y \in \left[\mathrm{-10m},\mathrm{10m}\right]$, and ``z \in \[\mathrm{-190m},\mathrm{10m}\]`` in depth, corresponding to a grid resolution of $512 \times 512 \times 200$  points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
+In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and a total of 10,000,000 photons is focused at a single point in the center. Our domain of interest is defined as $x,y \in \left[\mathrm{-10m},\mathrm{10m}\right]$, and $z \in \left[\mathrm{-190m},\mathrm{10m}\right]$ in depth, corresponding to a grid resolution of $512 \times 512 \times 200$  points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
 
 ##  Initial Condition 
 
@@ -37,7 +37,7 @@ nye = 512                   # Number of grid point of the calculation grid in y 
 num = 31                    # Constant value (number of angle measurement in Kirk,1981)
 ztop = 10                   # Number of grid point in air phase in z direction
 # photon
-nphoton = 1000000           # Number of photons being generated at each grid point 
+nphoton = 10000000           # Number of photons being generated at each grid point 
 kr = 10                     # Dummy variable (in developement, not being used)                    
 nxp = 512                   # Number of grid points in x direction where photon can be emitted
 kbc = 0                     # Binary value 0 and 1 depending on Boundary condition being implemented 
@@ -148,6 +148,8 @@ OceanLight.applybc!(ed,p)
 Once the simulation is over, the downwelling irradiance field $I(x,y,z)$ is stored in variable `ed`. To export the data, the build-in function `OceanLight.exported` export data and its statistical information in to `.h5` format, depended on the path given by user. 
 
 The result downwelling irradiance field $I(x,y,z)$ is in 3 dimension tensor, where the first two dimensions represent horizontal field, and the last represents the vertical field or depth. The first few depth layer represents the air phase, hence $I(x,y,z)$ is zeros, depending on how many layer specified as air phases `ztop`. To visualize using `Plots` julia package, users can try the example code below. 
+
+First, the irradiance field $I(x,y,z)$ is normalized by its maximum value $I_{0}$. To prevent undefined values `NaN` during logarithmic scaling, all zero-valued grid points are replaced with its minimum value.
 
 ```@example Center
 max_val, max_loc = findmax(ed)
