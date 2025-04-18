@@ -39,7 +39,7 @@ Here, we introduce `OceanLight`, a Julia-based software package designed to faci
 
 The main features of ‘OceanLight’ are illustrated in figure 2.
 
-![Flow Diagram of the OceanLight's main feature.\label{fig:}](FlowDiagram2ndVer.png)
+![Flow Diagram of the OceanLight's main feature.\label{fig:}](Flow_diagramver3.png)
 
 `OceanLight` requires user input in three categories.
 
