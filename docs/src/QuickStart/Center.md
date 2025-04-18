@@ -15,6 +15,10 @@ using OceanLight
 using Random
 ```
 
+## Problem
+
+In this example, the problem is to calculate the downwelling irradiance field, when the surface is completely flat, and the total of 100,000 photons is focusing only one point in the center. Our interested domain is $x,y \in \[\mathrm{-10m},\mathrm{10m}\]$, whereas $z \in \[\mathrm{-190m},\mathrm{10m}\]$ depth, which corresponding to $512 \times 512 \times 200$ grid points. The periodic boundary condition is implemented across the domain boundary. The attenuated coefficient of water is chosen at absorbance coefficient $a = 0.0196$ and scattering coefficient $b = 0.0031$, which corresponding to the optical properties of sea water at wavelength $490 \mathrm{nm}$ [^1]. 
+
 ##  Initial Condition 
 
 OceanLight accesses all input variables in `.yml` format and stores their values in `Param` structure.
@@ -26,26 +30,28 @@ All input variables required by OceanLight can be separated into 3 categories:
 
 ```@example Center
 # irradiance
-nz = 200
-dz = 1
-nxe = 512
-nye = 512
-num = 31
-ztop = 10
+nz = 200                    # Number of total grid point in z direction
+dz = 1                      # Physical length of grid spacing in z direction
+nxe = 512                   # Number of grid point of the calculation grid in x direction  
+nye = 512                   # Number of grid point of the calculation grid in y direction  
+num = 31                    # Constant value (number of angle measurement in Kirk,1981)
+ztop = 10                   # Number of grid point in air phase in z direction
 # photon
-nphoton = 100000
-kr = 10
-nxp = 512
-kbc = 0
-b = 0.006
-nyp = 512
-a = 0.007
+nphoton = 100000            # Number of photons being generated at each grid point 
+kr = 10                     # Dummy variable (in developement, not being used)                    
+nxp = 512                   # Number of grid points in x direction where photon can be emitted
+kbc = 0                     # Binary value 0 and 1 depending on Boundary condition being implemented 
+b = 0.0031                  # Scattering coefficient 
+nyp = 512                   # Number of grid points in x direction where photon can be emitted
+a = 0.0196                  # Absorbtance coefficient
 # wave
-pey = 0.07853981633974483
-nxeta = 512
-nyeta = 512
-pex = 0.07853981633974483
+pey = 2*pi/20.0             # Lowest wavenumber that can be captured during the derivative of surface elevation in x direction
+nxeta = 512                 # Number of surface elevation grid point in x direction
+nyeta = 512                 # Number of surface elevation grid point in y direction
+pex = 2*pi/20.0              # Lowest wavenumber that can be captured during the derivative of surface elevation in y direction
 ```
+NOTE: `num` need to set constant at 31 (number of angle measurement in Kirk, 1981 [^2]). `kbc` only take binary value of 0 and 1 (Periodic BC). In contrary to grid spacing `dz` in z-direction, grid spacing in x and y direction `dx` and `dy` will be calculated automatically from `OceanLight.readparams`, where the calculation is $dx = \frac{\frac{2\pi}{pex}}{nxe}$, and $dy = \frac{\frac{2\pi}{pey}}{nye}$. For more detail on all parameters being used can be access here Simulation/ModelSetup. 
+
 To create a input variable file suitable for this package, user can either create a new file in `.yml` format, copy, and paste the code block above, or using a build-in function `OceanLight.writeparams` to automate the process. 
 
 The function `OceanLight.writeparams` converts the dictionary of input variables into the `light.yml` file. 
@@ -110,9 +116,9 @@ iy = div(p.nyη,2)+1
 
 During the air-water interaction process, OceanLight simulates the photons transfer directly downward from the air side, interacts with the water surface, and transfer down into water medium. 
 
-User can generate random surface elevation attribution ${\eta,\eta_{x},\eta_{y}}$ with `OceanLight.setwave!`, or provided specific data ${\eta_{0},\eta_{x0},\eta_{y0}}$  . OceanLight can map the user's provided data of ${\eta_{0},\eta_{x0},\eta_{y0}}$, which might have different dimension onto the suitable dimension of input value ${η,ηx,ηy}$ with `OceanLight.convertwave!`.
+User can generate random surface elevation attribution $\{\eta,\eta_{x},\eta_{y}\}$ with `OceanLight.setwave!`, or provided specific data $\{\eta_{0},\eta_{x0},\eta_{y0}\}$  . OceanLight can map the user's provided data of $\{\eta_{0},\eta_{x0},\eta_{y0}\}$, which might have different dimension onto the suitable dimension of input value $\{η,ηx,ηy\}$ with `OceanLight.convertwave!`.
 
-In this example, we will consider the case of flat surface elevation. Hence, ${η,ηx,ηy}$ is equal to the matrix of zeros. 
+In this example, we will consider the case of flat surface elevation. Hence, $\{η,ηx,ηy\}$ is equal to the matrix of zeros. 
 
 Once all the input variables are in place, `OceanLight.interface!` calculate the refraction of the light between two medium given surface elevation attribution and return the position, reflectance angle, and transmission ratio. 
 
@@ -122,7 +128,7 @@ OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 
 ## Monte Carlo simulation
 
-`OceanLight` simulates the photon traveling inside the water medium, given its initial position ${xpb,ypb,zpb}$ and the direction it started with${θ,ϕ}$. Once photons are inside the water, `OceanLight` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
+`OceanLight` simulates the photon traveling inside the water medium, given its initial position $\{xpb,ypb,zpb\}$ and the direction it started with$\{θ,ϕ\}$. Once photons are inside the water, `OceanLight` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
 
 The `transfer!` function simulate a single photon path and store its landed position on the grid `ed`. Hence, to simulate multiple photons, users need to loop the `transfer!` function and giving the input of an individual photon's number `ip`. Thus, `OceanLight` could facilitate parallel computation. 
 
@@ -149,11 +155,11 @@ using Plots.Measures
 
 l = @layout [grid(2,1) a{0.5w} ; b{0.5w}]
 
-p1 = heatmap(p.x .-40,p.y .-40,log.(ed[:,:,40]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+p1 = heatmap(p.x .-10,p.y .-10,log.(ed[:,:,40]),clim=(-20,0),framestyle = :box,grid = false, c =cgrad(:viridis)
     ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
-p2 = heatmap(p.x .-40,p.y .-40,log.(ed[:,:,160]),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+p2 = heatmap(p.x .-10,p.y .-10,log.(ed[:,:,160]),clim=(-20,0),framestyle = :box,grid = false, c =cgrad(:viridis)
     ,legend = :none,xlabel="\$x(m)\$",ylabel="\$y(m)\$")
-p3 = heatmap(p.x .-40,reverse(p.z) ,reverse(transpose(log.(ed[:,256,:]))),clim=(-20,20),framestyle = :box,grid = false, c =cgrad(:viridis)
+p3 = heatmap(p.x .-10,reverse(p.z) ,reverse(transpose(log.(ed[:,256,:]))),clim=(-20,0),framestyle = :box,grid = false, c =cgrad(:viridis)
     ,xlabel="\$x(m)\$",ylabel="\$z(m)\$"
     ;cbar_title="\$\\ln(I(x,y,z))\$")
 plot(p1, p2,p3, layout = l,
@@ -162,3 +168,8 @@ title = ["($i)" for j in 1:1, i in ["a","b","c"]], titleloc = :left, titlefont =
 plot!(size=(900,1200))
 ```
 
+## Reference 
+
+[^1]: Smith, R. C., & Baker, K. S. (1981). Optical properties of the clearest natural waters (200-800 nm). Applied optics, 20(2), 177–184. https://doi.org/10.1364/AO.20.000177 
+
+[^2]: Kirk, J. T. O. (1981). Monte Carlo procedure for simulating the penetration of light into natural waters. In Technical paper - Commonwealth Scientific and Industrial Research Organization (Vol. 36).
