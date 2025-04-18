@@ -152,7 +152,7 @@ The result downwelling irradiance field $I(x,y,z)$ is in 3 dimension tensor, whe
 ```@example Center
 max_val, max_loc = findmax(ed)
 ed = ed./max_val
-nonzero_vals = ed[ed .! =0]
+nonzero_vals = ed[ed .!= 0]
 min_val = minimum(nonzeros_vals)
 
 for i in 1:int(nxe+1)
