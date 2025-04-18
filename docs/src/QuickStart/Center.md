@@ -155,8 +155,8 @@ ed = ed./max_val
 nonzero_vals = ed[ed .!= 0]
 min_val = minimum(nonzero_vals)
 
-for i in 1:int(nxe+1)
-    for j in 1:int(nye+1)
+for i in 1:Int(nxe+1)
+    for j in 1:Int(nye+1)
         for k in ztop:nz
             if ed[i,j,k] == 0
                 ed[i,j,k] = min_val
