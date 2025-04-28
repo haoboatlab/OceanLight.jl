@@ -25,7 +25,7 @@ bibliography: paper.bib
 
 # Summary
 
-`OceanLight` is a Julia-based scientific package that simulates photon trajectories and stores their downward irradiance field in three-dimensional space using direct Monte Carlo time-independent simulation. The simulated photon trajectories begin in the air phase, interact with the water surface, refract and transfer into water, then travel, and scatter until they are either absorbed or reach the bottom of the field of interest. `OceanLight` automates the entire procedure of a photon's sequence of events, including determining its fate and storing its landing position, which can later be exported and accessed in `.h5` format.
+`OceanLight` is a Julia-based scientific package that simulates photon trajectories and records their downward irradiance field in three-dimensional (3D) space using direct Monte Carlo simulation. Photons, initially located in the air phase, are emitted vertically toward the water surface. They experience refraction at the water surface, as well as absorption and scattering within the water column. `OceanLight` tracks the spatial locations and energies of all photons, enabling the calculation of downwelling irradiance. The full 3D irradiance field and statistics are exported and can be accessed in HDF5 format.
 
 # Statement of need
 
