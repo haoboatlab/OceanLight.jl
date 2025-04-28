@@ -57,15 +57,15 @@ Simulation output can be exported in HDF5 (`.h5`) format using `OceanLight.expor
 
 To demonstrate the capabilities of this package, we simulate downwelling irradiance in two scenarios:
 
-* *Flat water surface:* $\left( \eta_{x} = \eta_{y} = 0  \right)$ with light intensity focused at the center of a spatial domain $x,y \in [\mathrm{−10m},\mathrm{10m}]$, using $10^{8}$ photons concentrated at a single point.
+* *Flat water surface:* $\left(\eta = 0  \right)$ Up to $10^{8}$ photons are emitted at a single point at the center of a domain of $x,y \in [\mathrm{−10m},\mathrm{10m}]$, which results in a focused light intensity field. 
 
-* *Realistic surface geometry:* based on observed surface elevation, with light intensity evenly distributed across the domain $x,y \in [\mathrm{−40m},\mathrm{40m}]$, using $10^{3}$ photons at every grid points.
+* *Realistic surface geometry:* At every grid point on the free surface of an irregular wave field, $10^{3}$ photons are emitted in a domain of $x,y \in [\mathrm{−40m},\mathrm{40m}]$. 
 
-In both cases, the optical properties of water are identical, with an absorption coefficient $a = 0.0196$ and a scattering coefficient $b = 0.0031$, representing seawater attenuation at a wavelength of $490 \mathrm{nm}$ [Smith:1981]. The spatial grid size in both x and y directions is chosen to ensure that the lowest wave numbers captured during the computation of surface elevation derivatives correspond to `pex` and `pey`. The irradiance field is stored on a grid of $512 \times 512 \times 190$ points, spanning a depth domain of $z \in [\mathrm{−190m},\mathrm{10m}]$. TPeriodic boundary conditions are applied on all sides. 
+In both cases, the optical properties of water are identical, with an absorption coefficient $a = 0.0196\ \mathrm{m^{-1}}$ and a scattering coefficient $b = 0.0031\ \mathrm{m^{-1}}$, representing seawater attenuation at a wavelength of $490 \mathrm{nm}$ [Smith:1981]. The irradiance field is stored on a grid of $512 \times 512 \times 190$ points, spanning a vertical domain of $z \in [\mathrm{−190m},\mathrm{10m}]$. Periodic boundary conditions are applied on horizontal directions. 
 
 ![Simulation of $10^{8}$ photons at the center of a flat surface. (a) Irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) Irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) Irradiance field on the vertical plane at the center. \label{fig:}](Center1e8.png)
 
-In the flat surface case, most photons are transmitted nearly perpendicular to the surface, as determined by the Fresnel equations. In the second scenario, we simulate a more realistic case using imported surface elevation data and uniformly distributed light input. The spatial spacing of incoming photons matches the `dx` and `dy` values used in the simulation grid.
+In the flat surface case, all photons are transmitted perpendicular to the surface, as determined by the Fresnel equations. In the second scenario, we simulate a more realistic case using imported surface elevation data and uniformly distributed light input. The spatial spacing of the incoming photons matches the `dx` and `dy` values used in the simulation grid.
 
 ![Simulation of 1000 Photons at each grid point with observed surface elevation. (a) Irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) Irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) Irradiance field on the vertical plane at the center. \label{fig:}](Wholegrid1000.png)
 
