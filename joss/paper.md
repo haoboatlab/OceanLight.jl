@@ -1,5 +1,5 @@
 ---
-title: "OceanLight.jl: Monte Carlo simulation to calculate downwelling irradiance"
+title: "OceanLight.jl: A Julia package for calculating irradiance in the upper ocean using Monte Carlo simulations"
 tags:
   - Julia
   - Ocean
