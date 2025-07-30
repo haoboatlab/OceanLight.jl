@@ -5,7 +5,8 @@
 
 ## Overview
 
-**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean. By implementing the Monte Carlo method, this simulation achieves the path of Photons: starting from the refraction in the air-water interface, to some specific depth underneath the water body. 
+**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean.
+It uses the Monte Carlo method to simulate the trajectory of photons, starting from the refraction in the air-water interface, to some specific depth underneath the water body. 
 
 ## Installation 
 
@@ -13,7 +14,7 @@ OceanLight requires Julia software. To do so,
 
 1. [Install Julia](https://julialang.org/downloads/) 
 
-2. Lauch Julia and type 
+2. Launch Julia and type 
 
 ```Julia
 using Pkg
