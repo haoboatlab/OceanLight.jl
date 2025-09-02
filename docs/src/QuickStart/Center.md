@@ -1,6 +1,6 @@
 # Quick Start 
 
-In this example, we introduce the `OceanLight` calculation of downwelling irradiance field underneath the flat surfcae. The code example here can be directly pasted onto Julia terminal, run through `.jl` script file, or IJulia notebook. 
+In this example, we introduce the `OceanLight` calculation of downwelling irradiance field underneath the flat surface. The code example here can be directly pasted onto Julia terminal, run through `.jl` script file, or IJulia notebook. 
 
 First, we import `OceanLight` packages and another `random` dependent package, that will be used as a seed to generate random number in the Monte Carlo simulation.
 
@@ -37,7 +37,7 @@ nye = 512                   # Number of grid point of the calculation grid in y 
 num = 31                    # Constant value (number of angle measurement in Kirk,1981)
 ztop = 10                   # Number of grid point in air phase in z direction
 # photon
-nphoton = 10000000           # Number of photons being generated at each grid point 
+nphoton = 10000000          # Number of photons being generated at each grid point 
 kr = 10                     # Dummy variable (in developement, not being used)                    
 nxp = 512                   # Number of grid points in x direction where photon can be emitted
 kbc = 0                     # Binary value 0 and 1 depending on Boundary condition being implemented 
@@ -48,7 +48,7 @@ a = 0.0196                  # Absorbtance coefficient
 pey = 2*pi/20.0             # Lowest wavenumber that can be captured during the derivative of surface elevation in x direction
 nxeta = 512                 # Number of surface elevation grid point in x direction
 nyeta = 512                 # Number of surface elevation grid point in y direction
-pex = 2*pi/20.0              # Lowest wavenumber that can be captured during the derivative of surface elevation in y direction
+pex = 2*pi/20.0             # Lowest wavenumber that can be captured during the derivative of surface elevation in y direction
 ```
 **NOTE:** `num` must be set to a constant value of 31 (number of angle measurement in Kirk, 1981 [^2]). `kbc` accepts only binary values (0 or 1), representing periodic boundary conditions. In contrast to grid spacing `dz` in z-direction, , the grid spacings in the x- and y-directions (`dx` and `dy`) are calculated automatically by `OceanLight.readparams`,  using the formulas $dx \times nxe  = \frac{2\pi}{pex}$, and $dy \times nye = \frac{2\pi}{pey}$. For more detail on all parameters  used, see [`Simulation parameters`](@ref simulation_parameters). 
 
