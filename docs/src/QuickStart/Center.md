@@ -180,10 +180,11 @@ p1 = heatmap(
     clim=(-20,-7), framestyle=:box, grid=false,
     c=cgrad(:viridis), legend=:none,
     xlabel="\$x(m)\$", ylabel="\$y(m)\$",
-    title="(a) z = $(round(p.z[iz_a], digits=1)) m"
-)
+    title="(a) z = $(round(p.z[iz_a], digits=1)) m",
+    xlim=[minimum(p.x).-10, maximum(p.x).-10],
+    ylim=[minimum(p.y).-10, maximum(p.y).-10])
 plot!(p1, [minimum(p.x).-10, maximum(p.x).-10], [p.y[iy_c]-10, p.y[iy_c]-10],
-      color=:red, lw=2, ls=:dash)
+      color=:red, lw=2, ls=:dash, alpha=0.6)
 
 # Panel (b) : z = iz_b
 p2 = heatmap(
@@ -191,10 +192,11 @@ p2 = heatmap(
     clim=(-20,-7), framestyle=:box, grid=false,
     c=cgrad(:viridis), legend=:none,
     xlabel="\$x(m)\$", ylabel="\$y(m)\$",
-    title="(b) z = $(round(p.z[iz_b], digits=1)) m"
-)
+    title="(b) z = $(round(p.z[iz_b], digits=1)) m",
+    xlim=[minimum(p.x).-10, maximum(p.x).-10],
+    ylim=[minimum(p.y).-10, maximum(p.y).-10])
 plot!(p2, [minimum(p.x).-10, maximum(p.x).-10], [p.y[iy_c]-10, p.y[iy_c]-10],
-      color=:red, lw=2, ls=:dash)
+      color=:red, lw=2, ls=:dash, alpha=0.6)
 
 # Panel (c) : vertical cross-section at y = iy_c
 p3 = heatmap(
@@ -203,15 +205,14 @@ p3 = heatmap(
     c=cgrad(:viridis), ylim=(-(nz*dz-10),0),
     xlabel="\$x(m)\$", ylabel="\$z(m)\$",
     cbar_title="\$\\ln\\frac{I(x,y,z)}{I_{0}}\$",
-    legend=:none,
-    title="(c) y = $(round(p.y[iy_c], digits=1)) m"
-)
+    title="(c) y = $(round(p.y[iy_c]-10, digits=1)) m",
+    xlim=[minimum(p.x).-10, maximum(p.x).-10])
 
 # Add horizontal lines for z = iz_a, iz_b
 plot!(p3, [minimum(p.x).-10, maximum(p.x).-10], [p.z[iz_a], p.z[iz_a]],
-      color=:red, lw=1.5, ls=:dash)
+      color=:red, lw=1.5, ls=:dash, label="", alpha=0.6)
 plot!(p3, [minimum(p.x).-10, maximum(p.x).-10], [p.z[iz_b], p.z[iz_b]],
-      color=:red, lw=1.5, ls=:dash)
+      color=:red, lw=1.5, ls=:dash, label="", alpha=0.6)
 
 # Combine
 plot(p1, p2, p3, layout=l,
