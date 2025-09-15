@@ -5,8 +5,9 @@
 
 ## Overview
 
-**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean.
-It uses the Monte Carlo method to simulate the trajectory of photons, starting from the refraction in the air-water interface, to some specific depth underneath the water body. 
+**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean. It uses the Monte Carlo method to simulate the trajectories of photons, from their refraction at the air–water interface to specific depths beneath the surface. 
+
+Optical oceanography concerns all aspects of light and its interaction with seawater, which are crucial for addressing problems related to physical, biological, and chemical oceanographic processes, such as phytoplankton photosynthesis, biogeochemical cycles, and climate change. However, due to the complex interaction between light and free-surface wave geometry, the irradiance distribution can be highly variable (Darecki et al., 2011; Gernez et al., 2011), making it difficult to obtain analytical solutions. **OceanLight.jl** enables physics-based, reproducible simulations of light distribution beneath the ocean surface.
 
 ## Installation 
 
