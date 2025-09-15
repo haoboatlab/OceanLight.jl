@@ -143,23 +143,23 @@ function readparams(fname="light.yml"::String)
     b = data[key]["b"]
     kr = data[key]["kr"]
     
-    @test nxe > 1
-    @test nye > 1
-    @test nz > 1
-    @test dz > 0
-    @test ztop > 0
-    @test num > 0
-    @test pex > 0
-    @test pey > 0
-    @test nxη > 1
-    @test nyη > 1
-    @test nxp > 1
-    @test nyp > 1
-    @test nphoton >= 1
-    @test typeof(kbc)<:Integer
-    @test a > 0
-    @test b > 0
-    @test kr > 0
+    @assert nxe > 1 "Invalid value of nxe"
+    @assert nye > 1 "Invalid value of nye"
+    @assert nz > 1 "Invalid value of nz"
+    @assert dz > 0 "Invalid value of dz"
+    @assert ztop > 0 "Invalid value of ztop"
+    @assert num > 0 "Invalid value of num"
+    @assert pex > 0 "Invalid value of pex"
+    @assert pey > 0 "Invalid value of pey"
+    @assert nxη > 1 "Invalid value of nxη" 
+    @assert nyη > 1 "Invalid value of nyη"
+    @assert nxp > 1 "Invalid value of nxp"
+    @assert nyp > 1 "Invalid value of nyp"
+    @assert nphoton >= 1 "Invalid value of nphoton"
+    @assert typeof(kbc)<:Integer "Invalid value of kbc"
+    @assert a > 0 "Invalid value of a"
+    @assert b > 0 "Invalid value of b"
+    @assert kr > 0 "Invalid value of kr"
     return Param(nxe,nye,num,nz,pex,pey,dz,ztop,nxη,nyη,nxp,nyp,nphoton,kbc,a,b,kr)
 end
 
