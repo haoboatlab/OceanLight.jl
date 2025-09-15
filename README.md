@@ -5,9 +5,9 @@
 
 ## Overview
 
-**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean. It uses the Monte Carlo method to simulate the trajectories of photons, from their refraction at the air–water interface to specific depths beneath the surface. 
+**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean. It uses the Monte Carlo method to simulate the trajectories of photons, from their refraction at the air–water interface to specific depths beneath the surface [^1] [^2]. 
 
-Optical oceanography concerns all aspects of light and its interaction with seawater, which are crucial for addressing problems related to physical, biological, and chemical oceanographic processes, such as phytoplankton photosynthesis, biogeochemical cycles, and climate change. However, due to the complex interaction between light and free-surface wave geometry, the irradiance distribution can be highly variable (Darecki et al., 2011; Gernez et al., 2011), making it difficult to obtain analytical solutions. **OceanLight.jl** enables physics-based, reproducible simulations of light distribution beneath the ocean surface.
+Optical oceanography concerns all aspects of light and its interaction with seawater, which are crucial for addressing problems related to physical, biological, and chemical oceanographic processes, such as phytoplankton photosynthesis, biogeochemical cycles, and climate change [^3] [^4]. However, due to the complex interaction between light and free-surface wave geometry, the irradiance distribution can be highly variable [^5] [^6], making it difficult to obtain analytical solutions. **OceanLight.jl** enables physics-based, reproducible simulations of light distribution beneath the ocean surface.
 
 ## Installation 
 
@@ -18,7 +18,6 @@ OceanLight requires Julia software. To do so,
 2. Launch Julia and type 
 
 ```Julia
-cd(mktempdir())
 using Pkg
 Pkg.add("OceanLight")
 ```
@@ -34,6 +33,9 @@ Pkg.test("OceanLight")
 As a simple example, let’s calculate the downwelling irradiance field when the surface is completely flat and a total of 10,000,000 photons are focused at a single point in the center.
 
 ```Julia
+using OceanLight 
+using Random
+
 # irradiance
 nz = 200                    # Number of total grid point in z direction
 dz = 1                      # Physical length of grid spacing in z direction
@@ -167,6 +169,8 @@ plot(p1, p2, p3, layout=l,
      titleloc=:left, titlefont=font(8),
      left_margin=10mm, right_margin=10mm)
 ```
+<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Center1e7.png" width="600" align="center">
+
 </details>
 For a complete guide with details on each function and step, see the [OceanLight's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
 
@@ -182,6 +186,14 @@ For a complete guide with details on each function and step, see the [OceanLight
 
 ## Reference 
 
-Hao, X., & Shen, L. (2022). A novel machine learning method for accelerated modeling of the downwelling irradiance field in the upper ocean. Geophysical Research Letters, 49, e2022GL097769. https://doi.org/10.1029/2022GL097769
+[^1]: Hao, X., & Shen, L. (2022). A novel machine learning method for accelerated modeling of the downwelling irradiance field in the upper ocean. Geophysical Research Letters, 49, e2022GL097769. https://doi.org/10.1029/2022GL097769
 
-Kirk, J. T. O. (1981). Monte Carlo procedure for simulating the penetration of light into natural waters. In Technical paper - Commonwealth Scientific and Industrial Research Organization (Vol. 36).
+[^2]: Kirk, J. T. O. (1981). Monte Carlo procedure for simulating the penetration of light into natural waters. In Technical paper - Commonwealth Scientific and Industrial Research Organization (Vol. 36).
+
+[^3]: Dickey, T. D., Kattawar, G. W., & Voss, K. J. (2011). Shedding new light on light in the ocean. Physics Today, 64(4), 44-49.
+
+[^4]: Dickey, T., Lewis, M., & Chang, G. (2006). Optical oceanography: recent advances and future directions using global remote sensing and in situ observations. Reviews of geophysics, 44(1).
+
+[^5]: Darecki, M., Stramski, D., & Sokólski, M. (2011). Measurements of high‐frequency light fluctuations induced by sea surface waves with an Underwater Porcupine Radiometer System. Journal of Geophysical Research: Oceans, 116(C7).
+
+[^6]: Gernez, P., Stramski, D., & Darecki, M. (2011). Vertical changes in the probability distribution of downward irradiance within the near‐surface ocean under sunny conditions. Journal of Geophysical Research: Oceans, 116(C7).
