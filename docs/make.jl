@@ -18,6 +18,7 @@ makedocs(
         "Light within Water" => "Simulation/WithinWater.md",
         "Exporting data" => "Simulation/Exporting.md"
         ],
+        "Contributor's guide" => "contribute.md",
         "Reference" => "reference.md"
     ])
 

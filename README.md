@@ -174,6 +174,14 @@ plot(p1, p2, p3, layout=l,
 
 For a complete guide with details on each function and step, see the [OceanLight's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
 
+## Contributing
+
+We always appreciate new contributions, no matter how big or small. Please [submit a pull request](https://github.com/haoboatlab/OceanLight.jl/compare) with your changes to help us make OceanLight even better! 
+
+If you'd like to work on a new feature, or if you're new to open source and want to crowd-source projects that match your interests, feel free to [raise an issue](https://github.com/haoboatlab/OceanLight.jl/issues/new). Ideas, suggestions, and questions are always welcome!
+
+For more information, check out our [contributor guide](https://haoboatlab.github.io/OceanLight.jl/dev/contribute/).
+
 ## Result
 
 <img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Center1e8.png" width="600" align="center">
