@@ -101,8 +101,7 @@ for i in 1:Int(nxe+1)
 end
 ```
 
-<details>
-<summary>We can then visualise this:</summary>
+We can then visualise this with, 
 
 ```Julia
 using Pkg; Pkg.add("Plots")
@@ -164,8 +163,8 @@ plot(p1, p2, p3, layout=l,
      titleloc=:left, titlefont=font(8),
      left_margin=10mm, right_margin=10mm)
 ```
-</details>
-<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/center1e7.png" width="600" align="center">
+
+![Center1e7](https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/center1e7.png)
 
 For a complete guide with details on each function and step, see the [OceanLight's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
 
