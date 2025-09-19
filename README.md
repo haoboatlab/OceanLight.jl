@@ -182,7 +182,7 @@ If you'd like to work on a new feature, or if you're new to open source and want
 
 For more information, check out our [contributor guide](https://haoboatlab.github.io/OceanLight.jl/dev/contribute/).
 
-## Result
+## Gallery
 
 <img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Center1e8.png" width="600" align="center">
 *Simulation of 1e8 Photons at the center of the flat surface. (a) irradiance field on the horizontal plane at 30 m depth. (b) irradiance field on the horizontal plane at 150 m depth. (c) irradiance field on the vertical plane at the center.*
