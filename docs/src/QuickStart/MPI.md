@@ -161,7 +161,7 @@ The visualization process is similar to the example shown [here](https://haoboat
 using Plots
 using Plots.Measures
 
-ax_val, max_loc = findmax(ed)
+max_val, max_loc = findmax(ed)
 ed = ed./max_val
 nonzero_vals = ed[ed .!= 0]
 min_val = minimum(nonzero_vals)
