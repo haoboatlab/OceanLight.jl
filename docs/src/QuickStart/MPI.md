@@ -1,5 +1,9 @@
 # Implementing MPI
 
+Since `OceanLight.jl` implements the Monte Carlo ray tracing algorithm, the accuracy of the solution depends on its convergence. However, this can be inefficient and time-consuming for specific problems that require a large number of photons `nphoton`. To address this issue, rather than running the entire simulation on a single CPU, we can allocate smaller chunks of photons across multiple CPUs, simulate them independently, and later combine the results into a single solution. That’s where MPI comes in.
+
+MPI, or Message Passing Interface, is a communication library designed for sending and receiving messages across multiple processors, making it suitable for parallel programming. To install MPI on your system, check out the [Installing Open MPI guide](https://docs.open-mpi.org/en/v5.0.x/installing-open-mpi/quickstart.html)
+
 ```@setup  MPI_tutorial
 cd(mktempdir()) 
 using Pkg 
@@ -9,6 +13,10 @@ Pkg.add("MPI")
 ```
 
 ## Problem
+
+In this example, the problem is to calculate the downwelling irradiance field when the surface is completely flat, and a total of 10,000,000 photons are focused at a single point in the center. Our domain of interest is defined as $x,y \in \left[\mathrm{-10m},\mathrm{10m}\right]$, and $z \in \left[\mathrm{-190m},\mathrm{10m}\right]$ in depth, corresponding to a grid resolution of $512 \times 512 \times 200$ points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and a scattering coefficient of $b = 0.0031$, which correspond to the optical properties of seawater at a wavelength of $490 ,\mathrm{nm}$ [^1].
+
+To execute parallel programming using MPI, our Julia program must be run through a `.jl` script file. Inside the script file, we first create input data structures for the simulation. Here, `OceanLight.writeparams` will create a new input file in `.yml` format.
 
 ```@example MPI_tutorial 
 using OceanLight 
@@ -29,99 +37,106 @@ data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>zto
 OceanLight.writeparams(data)
 ```
 
-## Initialize MPI
+For a step-by-step description and the utility of each function, check out this [tutorial](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
+
+## Initialize MPI and variables
+
+To enable parallel programming in Julia, we first import the `MPI` package and then initialize the environment with `MPI.Init()`.  
 
 ```@example MPI_tutorial 
 using MPI
 MPI.Init()
 ```
 
+First, `MPI.COMM_WORLD` is a predefined intracommunicator that represents the group of processes launched with MPI. We will declare it as the variable `comm`. Each processor inside the communicator has a unique rank, or ID number, which we can access through `MPI.Comm_rank(comm)`. Lastly, we can obtain the number of processors inside the communicator with `MPI.Comm_size(comm)`. 
+
 ```@example MPI_tutorial 
 comm = MPI.COMM_WORLD
-# myid is rank of each cpu (tagname corresponding to each cpu being used)
-myid = MPI.Comm_rank(comm)
-# ncpu is number of cpu used to run the program
-ncpu = MPI.Comm_size(comm)
+processor_id = MPI.Comm_rank(comm)
+number_cpu = MPI.Comm_size(comm)
 ```
+
+Users need to specify these variables and their corresponding dimensions.
+
+**NOTE:** The random number generator is created with `MersenneTwister`. Given the same input or seed, this pseudorandom number generator (PRNG) will always produce random numbers in a predictable and reproducible way. Hence, to ensure the independence of Monte Carlo paths across all processors, we need to offset the seed in each processor so that it does not generate the exact same random numbers.`ix` and `iy` are the array coordination corresponding to the center of the field.  
+
 ```@example MPI_tutorial 
-# the total number of photons in this case is the photons at each grid poin multiply by every single grid
-nind=p.nphoton
-# dind is the number photons that each cpu need to work on
+p = OceanLight.readparams()
 
-if mod(nind,ncpu) ==0
-    dind=div(nind,ncpu)
+η = zeros(p.nxs,p.nys)
+ηx = zeros(p.nxs,p.nys)
+ηy = zeros(p.nxs,p.nys)
+randrng = MersenneTwister(1234 + processor_id)
+ϕps,θps = phasePetzold()
+ed = zeros(p.nx,p.ny,p.nz)
+esol = zeros(p.num,p.nz)
+area = zeros(4)
+interi = zeros(Int64,4)
+interj = zeros(Int64,4)
+ix = div(p.nxη,2) + 1
+iy = div(p.nyη,2) + 1
+```
+
+## Monte Carlo path with MPI
+
+The general idea of implementing parallel programming in `OceanLight.jl` is that multiple CPUs can work simultaneously to obtain results. First, we define a range of Photon IDs `photon_list`, which is a sequence of positive integers representing the total number of photons to be simulated. From this range, we distribute an equal number of photons to each processor, stored as `cpu_number_photon`. Once the refraction at the interface is calculated, all photons proceed to follow independent Monte Carlo paths. We then loop through every individual photon on each processor, specifying its starting point `starting` and ending point `ending` for the `for` loop. Finally, once all simulations are complete, we combine the results across all processors. 
+
+```@example MPI_tutorial 
+photon_list = 1:p.nphoton
+total_number_photon = p.nphoton
+
+if mod(total_number_photon,number_cpu) ==0
+    cpu_number_photon = div(total_number_photon , number_cpu)
 else
-    dind=div(nind,ncpu) + 1
-end
-inds=myid*dind+1
-# inde is the total number of the photons that cpu would simulate
-inde=(myid+1)*dind
-# if total number is larger than the actual photons we want to calculate, set it equal
-
-if inde > nind
-    inde=nind
+    cpu_number_photon = div(total_number_photon , number_cpu) + 1
 end
 
-allind=1:p.nphoton
-"η is the height(z axis) corresponding to each grid point on the surface, 2d array of grid number in \
-x and y direction"
-η=zeros(p.nxs,p.nys)
-"ηx is the x coordination corresponding to each grid point on the surface, 2d array of grid number in\
- x and y direction"
-ηx=zeros(p.nxs,p.nys)
-"ηy is the y coordination corresponding to each grid point on the surface, 2d array of grid number in\
- x and y direction"
-ηy=zeros(p.nxs,p.nys)
-randrng = MersenneTwister(1234+myid)
-ϕps,θps=phasePetzold()
+starting = (processor_id * cpu_number_photon) + 1
+ending = (processor_id + 1) * cpu_number_photon
 
-ed=zeros(p.nx,p.ny,p.nz)
-esol=zeros(p.num,p.nz)
-area=zeros(4)
-interi=zeros(Int64,4)
-interj=zeros(Int64,4)
-ix=div(p.nxη,2)+1
-iy=div(p.nyη,2)+1
+if ending > total_number_photon
+    ending = total_number_photon
+end
 
-
-η.=0
-ηx.=0
-ηy.=0
-ed.=0
-esol.=0
 MPI.Allreduce!(η,+,comm)
 MPI.Allreduce!(ηx,+,comm)
 MPI.Allreduce!(ηy,+,comm)
 if p.z[1] <= maximum(η)
     error("ztop smaller than maximum η!")
 end
-println("myid $myid wave surface input complete!")
-xpb,ypb,zpb,θ,ϕ,fres=interface(η,ηx,ηy,p)
-println("myid $myid refraction at interface complete!")
+println("Processor ID $processor_id wave surface input complete!")
+xpb,ypb,zpb,θ,ϕ,fres = interface(η,ηx,ηy,p)
+println("Processor ID $processor_id refraction at interface complete!")
 
-for ind=inds:inde
-    ip=allind[ind]
-    transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,
+for ind = starting:ending
+    ip = photon_list[ind]
+    OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,
                 xpb[ix,iy],ypb[ix,iy],zpb[ix,iy],area,interi,interj,
                                     randrng,η,ϕps,θps,p,1)
 end
 
-
 MPI.Allreduce!(ed,+,comm)
 ```
 
+Since the simulation is running from a Julia script file, we apply periodic boundary conditions and export the results in `.h5` format for later accesability. 
+
 ```
-if myid ==0
-    applybc!(ed,p)
-    exported(ed,η,p,"rawdat/case$(icase)/ed","3D",176)
+if processor_id == 0
+    OceanLight.applybc!(ed,p)
+    OceanLight.exported(ed,η,p,"rawdat/case$(icase)/ed","3D",176)
 end
 ```
+Once `MPI` finishes its task, we end the communication process with `MPI.Finalize`. 
+
 ```@example MPI_tutorial 
 MPI.Barrier(comm)
 MPI.Finalize()
+OceanLight.applybc!(ed,p) # hide
 ```
 
 # Run .jl file
+
+Once the Julia script file is saved, the code is ready to be executed. Within the same folder, use the command line to run `mpirun` and execute the MPI task. Here, the number following `-np` icorresponds to the number of CPUs you want to use, and do not forget to replace `FILE_NAME.jl` with the name of your Julia script file.
 
 ```
 mpirun -np 4 julia FILE_NAME.jl
@@ -129,15 +144,37 @@ mpirun -np 4 julia FILE_NAME.jl
 
 # Visualization 
 
+To visualize the downwelling irradiance field, we first extract the data from the `ed.h5` file along with the spatial coordinates in the x, y, and z directions into the `struct p`. The code example below can be directly pasted into the Julia terminal, run through a `.jl` script file, or executed in an IJulia notebook.
 
+```
+using OceanLight 
+using HDF5
 
+p = OceanLight.readparams()
+ed = h5open("ed.h5" ,"r")
+ed = read(ed,"ed")
+```
 
-
-
+The visualization process is similar to the example shown [here](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
 
 ```@example MPI_tutorial 
 using Plots
 using Plots.Measures
+
+ax_val, max_loc = findmax(ed)
+ed = ed./max_val
+nonzero_vals = ed[ed .!= 0]
+min_val = minimum(nonzero_vals)
+
+for i in 1:Int(nxe+1)
+    for j in 1:Int(nye+1)
+        for k in ztop:nz
+            if ed[i,j,k] == 0
+                ed[i,j,k] = min_val
+            end
+        end
+    end
+end
 
 # Choose slice indices
 iy_c = 256   # y-index for vertical cross-section
@@ -192,5 +229,8 @@ plot(p1, p2, p3, layout=l,
      size=(900,700),
      titleloc=:left, titlefont=font(8),
      left_margin=10mm, right_margin=10mm)
-
 ```
+
+## Reference 
+
+[^1]: Smith, R. C., & Baker, K. S. (1981). Optical properties of the clearest natural waters (200-800 nm). Applied optics, 20(2), 177–184. https://doi.org/10.1364/AO.20.000177 
