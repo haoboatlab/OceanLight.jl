@@ -47,11 +47,11 @@ The main features of `OceanLight` are illustrated in figure 2.
 2. **Photon:** number of photons and grid spacing
 3. **Wave:** ocean surface elevation and related attributes 
 
-`OceanLight` reads input parameters from `.yml` files and stores it in Julia's `struct` format. In addition, surface wave attributes, comprising surface elevation and its partial derivatives in the x and y directions, are required.  Users can either generate randomized surface elevations using `OceanLight.setwave!` or import their own data and convert it to a format that aligns with the photon entry grid using `OceanLight.convertwave!`.
+`OceanLight` reads input parameters from `.yml` files and stores them in Julia's `struct` format. In addition, surface wave attributes, comprising surface elevation and its partial derivatives in the x and y directions, are required.  Users can either generate randomized surface elevations using `OceanLight.setwave!` or import their own data and convert it to a format that aligns with the photon entry grid using `OceanLight.convertwave!`.
 
 At the air–water interface, `OceanLight.interface` calculates the polar angle $\theta$ and azimuthal angle $\phi$ at which photons are transmitted into the water, using Snell’s Law. The portions of transmitted and reflected light energy are determined using the Fresnel equations.
 
-Once photons are transmitted into the water, `OceanLight.transfer` simulates their paths using the direct MC method. Each photon is tracked as it travels through the water column, with its position updated after every scattering or absorption event. The process continues until the photon either vanishes in absorption or reaches the bottom boundary. To accelerate computation, `OceanLight`supports parallel processing via MPI, distributing photons evenly across CPU threads. Upon completion, the results are gathered and combined to reconstruct the irradiance field.
+Once photons are transmitted into the water, `OceanLight.transfer` simulates their paths using the direct MC method. Each photon is tracked as it travels through the water column, with its position updated after every scattering or absorption event. The process continues until the photon either vanishes in absorption or reaches the bottom boundary. To accelerate computation, `OceanLight` can be integrated with MPI to enable parallel processing.
 
 Simulation output can be exported in HDF5 (`.h5`) format using `OceanLight.exported`, allowing users access to the full three-dimensional irradiance field and its statistical properties.
 
