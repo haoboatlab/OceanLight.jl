@@ -1,6 +1,6 @@
 # Implementing MPI
 
-Since `OceanLight.jl` implements the Monte Carlo ray tracing algorithm, the accuracy of the solution depends on its convergence. However, this can be inefficient and time-consuming for specific problems that require a large number of photons `nphoton`. To address this issue, rather than running the entire simulation on a single CPU, we can allocate smaller chunks of photons across multiple CPUs, simulate them independently, and later combine the results into a single solution. That’s where MPI comes in.
+Since `OceanLight.jl` implements the Monte Carlo ray tracing algorithm, the accuracy of the solution depends on its convergence. However, this process can be inefficient and time-consuming for certain problems that require a large number of photons `nphoton`. To address this issue, instead of running the entire simulation on a single CPU, we can divide the workload by allocating smaller chunks of photons across multiple CPUs, simulate them independently, and then combine the results into a single solution. That’s where MPI comes in.
 
 MPI, or Message Passing Interface, is a communication library designed for sending and receiving messages across multiple processors, making it suitable for parallel programming. To install MPI on your system, check out the [Installing Open MPI guide](https://docs.open-mpi.org/en/v5.0.x/installing-open-mpi/quickstart.html)
 
@@ -14,9 +14,9 @@ Pkg.add("MPI")
 
 ## Problem
 
-In this example, the problem is to calculate the downwelling irradiance field when the surface is completely flat, and a total of 10,000,000 photons are focused at a single point in the center. Our domain of interest is defined as $x,y \in \left[\mathrm{-10m},\mathrm{10m}\right]$, and $z \in \left[\mathrm{-190m},\mathrm{10m}\right]$ in depth, corresponding to a grid resolution of $512 \times 512 \times 200$ points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and a scattering coefficient of $b = 0.0031$, which correspond to the optical properties of seawater at a wavelength of $490 ,\mathrm{nm}$ [^1].
+In this example, the goal is to calculate the downwelling irradiance field when the surface is completely flat, and a total of 10,000,000 photons are focused at a single point at the center. The domain of interest is defined as $x,y \in \left[\mathrm{-10m},\mathrm{10m}\right]$, and $z \in \left[\mathrm{-190m},\mathrm{10m}\right]$ in depth, corresponding to a grid resolution of $512 \times 512 \times 200$ points. Periodic boundary conditions are applied at the domain boundaries. The attenuation properties of water are characterized by an absorption coefficient of $a = 0.0196$ and a scattering coefficient of $b = 0.0031$, which correspond to the optical properties of seawater at a wavelength of $490 ,\mathrm{nm}$ [^1].
 
-To execute parallel programming using MPI, our Julia program must be run through a `.jl` script file. Inside the script file, we first create input data structures for the simulation. Here, `OceanLight.writeparams` will create a new input file in `.yml` format.
+To execute parallel programming using MPI, the Julia program must be run from a `.jl` script file. Inside the script, we first create the input data structures for the simulation. Here, `OceanLight.writeparams` generates a new input file in `.yml` format.
 
 ```@example MPI_tutorial 
 using OceanLight 
@@ -48,7 +48,7 @@ using MPI
 MPI.Init()
 ```
 
-First, `MPI.COMM_WORLD` is a predefined intracommunicator that represents the group of processes launched with MPI. We will declare it as the variable `comm`. Each processor inside the communicator has a unique rank, or ID number, which we can access through `MPI.Comm_rank(comm)`. Lastly, we can obtain the number of processors inside the communicator with `MPI.Comm_size(comm)`. 
+Here, `MPI.COMM_WORLD` is a predefined intracommunicator that represents the group of processes launched with MPI. We assign it to the variable `comm`. Each processor within the communicator has a unique rank (or ID number), which can be accessed using `MPI.Comm_rank(comm)`. Finally, the total number of processors in the communicator can be obtained with `MPI.Comm_size(comm)`. 
 
 ```@example MPI_tutorial 
 comm = MPI.COMM_WORLD
@@ -79,7 +79,7 @@ iy = div(p.nyη,2) + 1
 
 ## Monte Carlo path with MPI
 
-The general idea of implementing parallel programming in `OceanLight.jl` is that multiple CPUs can work simultaneously to obtain results. First, we define a range of Photon IDs `photon_list`, which is a sequence of positive integers representing the total number of photons to be simulated. From this range, we distribute an equal number of photons to each processor, stored as `cpu_number_photon`. Once the refraction at the interface is calculated, all photons proceed to follow independent Monte Carlo paths. We then loop through every individual photon on each processor, specifying its starting point `starting` and ending point `ending` for the `for` loop. Finally, once all simulations are complete, we combine the results across all processors. 
+The general idea behind implementing parallel programming in `OceanLight.jl` is that multiple CPUs can operate simultaneously to obtain results. First, we define a range of photon IDs, `photon_list`, which is a sequence of positive integers representing the total number of photons to be simulated. From this range, an equal number of photons are distributed to each processor and stored as `cpu_number_photon`. Once the refraction at the interface has been calculated, all photons proceed to follow independent Monte Carlo paths. We then iterate through each photon on every processor, specifying its starting point `starting` and ending point `ending` within the `for` loop. Finally, after all simulations are completed, the results from all processors are combined into a single output. 
 
 ```@example MPI_tutorial 
 photon_list = 1:p.nphoton
@@ -118,7 +118,7 @@ end
 MPI.Allreduce!(ed,+,comm)
 ```
 
-Since the simulation is running from a Julia script file, we apply periodic boundary conditions and export the results in `.h5` format for later accesability. 
+We apply periodic boundary conditions and export the results in `.h5` format for later accesability. 
 
 ```
 if processor_id == 0
@@ -144,7 +144,7 @@ mpirun -np 4 julia FILE_NAME.jl
 
 # Visualization 
 
-To visualize the downwelling irradiance field, we first extract the data from the `ed.h5` file along with the spatial coordinates in the x, y, and z directions into the `struct p`. The code example below can be directly pasted into the Julia terminal, run through a `.jl` script file, or executed in an IJulia notebook.
+To visualize the downwelling irradiance field, we first extract the data from the `ed.h5` file, along with the spatial coordinates in the x, y, and z directions, into the `struct p`. The code example below can be run directly in the Julia terminal, executed from a `.jl` script file, or used within an IJulia notebook.
 
 ```
 using OceanLight 
