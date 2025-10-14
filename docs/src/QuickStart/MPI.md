@@ -166,9 +166,9 @@ ed = ed./max_val
 nonzero_vals = ed[ed .!= 0]
 min_val = minimum(nonzero_vals)
 
-for i in 1:Int(nxe+1)
-    for j in 1:Int(nye+1)
-        for k in ztop:nz
+for i in 1:Int(p.nxe+1)
+    for j in 1:Int(p.nye+1)
+        for k in Int(p.ztop):Int(p.nz)
             if ed[i,j,k] == 0
                 ed[i,j,k] = min_val
             end
@@ -212,7 +212,7 @@ plot!(p2, [minimum(p.x).-10, maximum(p.x).-10], [p.y[iy_c]-10, p.y[iy_c]-10],
 p3 = heatmap(
     p.x .-10, reverse(p.z), reverse(transpose(log.(ed[:,iy_c,:]))),
     clim=(-20,-7), framestyle=:box, grid=false,
-    c=cgrad(:viridis), ylim=(-(nz*dz-10),0),
+    c=cgrad(:viridis), ylim=(-(p.nz*p.dz-10),0),
     xlabel="\$x(m)\$", ylabel="\$z(m)\$",
     cbar_title="\$\\ln\\frac{I(x,y,z)}{I_{0}}\$",
     title="(c) y = $(round(p.y[iy_c]-10, digits=1)) m",
