@@ -104,9 +104,8 @@ MPI.Allreduce!(ηy,+,comm)
 if p.z[1] <= maximum(η)
     error("ztop smaller than maximum η!")
 end
-println("Processor ID $processor_id wave surface input complete!")
+
 xpb,ypb,zpb,θ,ϕ,fres = interface(η,ηx,ηy,p)
-println("Processor ID $processor_id refraction at interface complete!")
 
 for ind = starting:ending
     ip = photon_list[ind]
@@ -115,6 +114,7 @@ for ind = starting:ending
                                     randrng,η,ϕps,θps,p,1)
 end
 
+println("Processor ID $processor_id complete!")
 MPI.Allreduce!(ed,+,comm)
 ```
 
@@ -123,7 +123,7 @@ We apply periodic boundary conditions and export the results in `.h5` format for
 ```
 if processor_id == 0
     OceanLight.applybc!(ed,p)
-    OceanLight.exported(ed,η,p,"rawdat/case$(icase)/ed","3D",176)
+    OceanLight.exported(ed,η,p,"ed","3D",176)
 end
 ```
 Once `MPI` finishes its task, we end the communication process with `MPI.Finalize`. 
