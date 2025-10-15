@@ -5,7 +5,8 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Quick Start" => [
-        "Photons at the center" => "QuickStart/Center.md"
+        "Photons at the center" => "QuickStart/Center.md",
+        "Implement MPI" => "QuickStart/MPI.md"
         ],
         "Module" => [
         "Parameters" => "module/Parameters.md",
