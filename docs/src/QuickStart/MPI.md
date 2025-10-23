@@ -1,6 +1,10 @@
 # Implementing MPI
 
-Since `OceanLight.jl` implements the Monte Carlo ray tracing algorithm, the accuracy of the solution depends on its convergence. However, this process can be inefficient and time-consuming for certain problems that require a large number of photons `nphoton`. To address this issue, instead of running the entire simulation on a single CPU, we can divide the workload by allocating smaller chunks of photons across multiple CPUs, simulate them independently, and then combine the results into a single solution. That’s where MPI comes in.
+Since `OceanLight.jl` implements the Monte Carlo ray tracing algorithm, the accuracy of its solution depends on convergence. However, this process can be inefficient and time-consuming for problems that require a large number of photons `N`. To address this issue, instead of running the entire simulation on a single CPU, we can divide the workload by allocating smaller chunks of photons across multiple CPUs, simulate them independently, and then combine the results into a single solution. This parallelization reduces the computational cost from $\mathcal{O}(N)$ for a single CPU to $\mathcal{O}(N/n)$ when using $n$ CPUs.
+
+![MPI_flowchart](https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/mpi_flowchart.png)
+
+*Flowchart and computational cost comparison between single CPU and multiple CPUs. Here, $N$ denotes the total number of photons and $I_0$ represents the resulting irradiance field.*
 
 MPI, or Message Passing Interface, is a communication library designed for sending and receiving messages across multiple processors, making it suitable for parallel programming. To install MPI on your system, check out the [Installing Open MPI guide](https://docs.open-mpi.org/en/v5.0.x/installing-open-mpi/quickstart.html)
 
