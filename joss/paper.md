@@ -61,7 +61,7 @@ To demonstrate the capabilities of this package, we simulate downwelling irradia
 
 * *Realistic surface geometry:* At every grid point on the free surface of an irregular wave field, $10^{3}$ photons are emitted in a domain of $x,y \in [\mathrm{−40m},\mathrm{40m}]$. 
 
-In both cases, the optical properties of water are identical, with an absorption coefficient $a = 0.0196\ \mathrm{m^{-1}}$ and a scattering coefficient $b = 0.0031\ \mathrm{m^{-1}}$, representing seawater attenuation at a wavelength of $490 \mathrm{nm}$ [Smith:1981]. The irradiance field is stored on a grid of $512 \times 512 \times 190$ points, spanning a vertical domain of $z \in [\mathrm{−190m},\mathrm{10m}]$. Periodic boundary conditions are applied on horizontal directions. 
+In both cases, the optical properties of water are identical, with an absorption coefficient $a = 0.0196\ \mathrm{m^{-1}}$ and a scattering coefficient $b = 0.0031\ \mathrm{m^{-1}}$, representing seawater attenuation at a wavelength of $490 \mathrm{nm}$ [@Smith:1981]. The irradiance field is stored on a grid of $512 \times 512 \times 190$ points, spanning a vertical domain of $z \in [\mathrm{−190m},\mathrm{10m}]$. Periodic boundary conditions are applied on horizontal directions. 
 
 ![Simulation of $10^{8}$ photons at the center of a flat surface. (a) Irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) Irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) Irradiance field on the vertical plane at the center. \label{fig:}](Center1e8.png)
 
