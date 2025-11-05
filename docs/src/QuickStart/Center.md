@@ -1,8 +1,8 @@
 # Quick Start 
 
-In this example, we introduce the `OceanLight` calculation of downwelling irradiance field underneath the flat surface. The code example here can be directly pasted onto Julia terminal, run through `.jl` script file, or IJulia notebook. 
+In this example, we introduce the `HydrOptics` calculation of downwelling irradiance field underneath the flat surface. The code example here can be directly pasted onto Julia terminal, run through `.jl` script file, or IJulia notebook. 
 
-First, we import `OceanLight` packages and another `random` dependent package, that will be used as a seed to generate random number in the Monte Carlo simulation.
+First, we import `HydrOptics` packages and another `random` dependent package, that will be used as a seed to generate random number in the Monte Carlo simulation.
 
 ```@setup  Center
 cd(mktempdir()) 
@@ -21,9 +21,9 @@ In this example, the problem is to calculate the downwelling irradiance field, w
 
 ##  Initial Condition 
 
-OceanLight accesses all input variables in `.yml` format and stores their values in `Param` structure.
+HydrOptics accesses all input variables in `.yml` format and stores their values in `Param` structure.
 
-All input variables required by OceanLight can be separated into 3 categories:
+All input variables required by HydrOptics can be separated into 3 categories:
 1. **Irradiance:** Setting up the dimension of downwelling irradiance field calculation grid. 
 2. **Photon:** Number of Photons and optical properties of the water.
 3. **Wave:** Structure of surface wave field. 
@@ -74,14 +74,14 @@ p = OceanLight.readparams()
 
 Before the simulation, user needs to declare and initialize all parameters and their dimensions. 
 
-During the light refraction between two mediums (air and water) calculation, `OceanLight` requires the surface elevation attribution: $\eta$; surface elevation, $\eta_{x}$; partial derivative of $\eta$ in x direction, and $\eta_{y}$; partial derivative of $\eta$ in y direction. All surface elevation distribution, as specified above, need to have the same dimension with the incoming photons' grid. Hence, 
+During the light refraction between two mediums (air and water) calculation, `HydrOptics` requires the surface elevation attribution: $\eta$; surface elevation, $\eta_{x}$; partial derivative of $\eta$ in x direction, and $\eta_{y}$; partial derivative of $\eta$ in y direction. All surface elevation distribution, as specified above, need to have the same dimension with the incoming photons' grid. Hence, 
 
 ```@example Center
 η = zeros(p.nxs,p.nys)
 ηx = zeros(p.nxs,p.nys)
 ηy = zeros(p.nxs,p.nys)
 ```
-After photons' interaction with the surface, OceanLight requires the information of specific coordinate of photon in cartesian grid ${xpb,ypb,zpb}$, the direction in which photon will travel in polar coordinate ${θ,ϕ}$, and the fraction of light that transmit through the water ${fres}$: all in the dimension of incoming photon grid size. 
+After photons' interaction with the surface, HydrOptics requires the information of specific coordinate of photon in cartesian grid ${xpb,ypb,zpb}$, the direction in which photon will travel in polar coordinate ${θ,ϕ}$, and the fraction of light that transmit through the water ${fres}$: all in the dimension of incoming photon grid size. 
 
 ```@example Center
 xpb = zeros(p.nxp,p.nyp);
@@ -92,9 +92,9 @@ zpb = zeros(p.nxp,p.nyp);
 fres = zeros(p.nxp,p.nyp);
 ```
 
-During the air-water interaction process, OceanLight simulates the photons transfer directly downward from the air side, interacts with the water surface, and transfer down into water medium. 
+During the air-water interaction process, HydrOptics simulates the photons transfer directly downward from the air side, interacts with the water surface, and transfer down into water medium. 
 
-User can generate random surface elevation attribution $\{\eta,\eta_{x},\eta_{y}\}$ with `OceanLight.setwave!`, or provided specific data $\{\eta_{0},\eta_{x0},\eta_{y0}\}$  . OceanLight can map the user's provided data of $\{\eta_{0},\eta_{x0},\eta_{y0}\}$, which might have different dimension onto the suitable dimension of input value $\{η,ηx,ηy\}$ with `OceanLight.convertwave!`.
+User can generate random surface elevation attribution $\{\eta,\eta_{x},\eta_{y}\}$ with `OceanLight.setwave!`, or provided specific data $\{\eta_{0},\eta_{x0},\eta_{y0}\}$  . HydrOptics can map the user's provided data of $\{\eta_{0},\eta_{x0},\eta_{y0}\}$, which might have different dimension onto the suitable dimension of input value $\{η,ηx,ηy\}$ with `OceanLight.convertwave!`.
 
 In this example, we will consider the case of flat surface elevation. Hence, $\{η,ηx,ηy\}$ is equal to the matrix of zeros. 
 
@@ -104,7 +104,7 @@ Once all the input variables are in place, `OceanLight.interface!` calculate the
 OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 ```
 
-`OceanLight` tracks the path of each photon travelling inside the water medium and store the irradiance value in the grid `ed`. 
+`HydrOptics` tracks the path of each photon travelling inside the water medium and store the irradiance value in the grid `ed`. 
 
 Users need to specify these variables and corresponding dimension. 
 
@@ -122,9 +122,9 @@ iy = div(p.nyη,2)+1
 
 ## Monte Carlo Simulation
 
-`OceanLight` simulates the photon traveling inside the water medium, given its initial position $\{xpb,ypb,zpb\}$ and the direction it started with$\{θ,ϕ\}$. Once photons are inside the water, `OceanLight` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
+`HydrOptics` simulates the photon traveling inside the water medium, given its initial position $\{xpb,ypb,zpb\}$ and the direction it started with$\{θ,ϕ\}$. Once photons are inside the water, `HydrOptics` will track its path, governed by its probability distribution and the attenuated coefficient input, and store the irradiance value in the grid `ed`. 
 
-The `transfer!` function simulate a single photon path and store its landed position on the grid `ed`. Hence, to simulate multiple photons, users need to loop the `transfer!` function and giving the input of an individual photon's number `ip`. Thus, `OceanLight` could facilitate parallel computation. 
+The `transfer!` function simulate a single photon path and store its landed position on the grid `ed`. Hence, to simulate multiple photons, users need to loop the `transfer!` function and giving the input of an individual photon's number `ip`. Thus, `HydrOptics` could facilitate parallel computation. 
 
 ```@example Center
 for ip = 1:p.nphoton

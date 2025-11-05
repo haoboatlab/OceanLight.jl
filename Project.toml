@@ -1,7 +1,7 @@
-name = "OceanLight"
-uuid = "ff88e13d-0366-4369-baeb-7c3fb86ee06b"
+name = "HydrOptics"
+uuid = "2b3ecd17-0e78-4272-b026-194a0ada43e6"
 authors = ["Xuanting Hao"]
-version = "1.0.0"
+version = "2.0.0"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"

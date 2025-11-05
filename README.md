@@ -1,17 +1,17 @@
-# OceanLight.jl
+# HydrOptics.jl
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://haoboatlab.github.io/OceanLight.jl/dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://mit-license.org/)
 
 ## Overview
 
-**OceanLight.jl** calculates the downwelling irradiance field in the upper ocean. It uses the Monte Carlo method to simulate the trajectories of photons, from their refraction at the air–water interface to specific depths beneath the surface [^1] [^2]. 
+**HydrOptics.jl** calculates the downwelling irradiance field in the upper ocean. It uses the Monte Carlo method to simulate the trajectories of photons, from their refraction at the air–water interface to specific depths beneath the surface [^1] [^2]. 
 
-Optical oceanography concerns all aspects of light and its interaction with seawater, which are crucial for addressing problems related to physical, biological, and chemical oceanographic processes, such as phytoplankton photosynthesis, biogeochemical cycles, and climate change [^3] [^4]. However, due to the complex interaction between light and free-surface wave geometry, the irradiance distribution can be highly variable [^5] [^6], making it difficult to obtain analytical solutions. **OceanLight.jl** enables physics-based, reproducible simulations of light distribution beneath the ocean surface.
+Optical oceanography concerns all aspects of light and its interaction with seawater, which are crucial for addressing problems related to physical, biological, and chemical oceanographic processes, such as phytoplankton photosynthesis, biogeochemical cycles, and climate change [^3] [^4]. However, due to the complex interaction between light and free-surface wave geometry, the irradiance distribution can be highly variable [^5] [^6], making it difficult to obtain analytical solutions. **HydrOptics.jl** enables physics-based, reproducible simulations of light distribution beneath the ocean surface.
 
 ## Installation 
 
-OceanLight requires Julia software. To do so, 
+HydrOptics requires Julia software. To do so, 
 
 1. [Install Julia](https://julialang.org/downloads/) 
 
@@ -22,7 +22,7 @@ using Pkg
 Pkg.add("OceanLight")
 ```
 
-After installing, verify that OceanLight works as intended by:
+After installing, verify that HydrOptics works as intended by:
 
 ```Julia
 Pkg.test("OceanLight")
@@ -172,11 +172,11 @@ plot(p1, p2, p3, layout=l,
 </details>
 <img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/center1e7.png" width="600" align="center">
 
-For a complete guide with details on each function and step, see the [OceanLight's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
+For a complete guide with details on each function and step, see the [HydrOptics's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
 
 ## Contributing
 
-We always appreciate new contributions, no matter how big or small. Please [submit a pull request](https://github.com/haoboatlab/OceanLight.jl/compare) with your changes to help us make OceanLight even better! 
+We always appreciate new contributions, no matter how big or small. Please [submit a pull request](https://github.com/haoboatlab/OceanLight.jl/compare) with your changes to help us make HydrOptics even better! 
 
 If you'd like to work on a new feature, or if you're new to open source and want to crowd-source projects that match your interests, feel free to [raise an issue](https://github.com/haoboatlab/OceanLight.jl/issues/new). Ideas, suggestions, and questions are always welcome!
 
