@@ -1,6 +1,6 @@
 # Refraction 
 
-To calculate the refraction of the photons between two medium: air and water, OceanLight.jl expands the Snell's Law into three dimension spherical coordinate, with $\theta_{t}$ denotes the transmission angle beneath the surface, and $\varphi$ denotes the azimuth angle. In addition to the photons' path, OceanLight.jl calculates the fraction of light that is being reflected back to the air side, via Fresnel reflectance. 
+To calculate the refraction of the photons between two medium: air and water, HydrOptics.jl expands the Snell's Law into three dimension spherical coordinate, with $\theta_{t}$ denotes the transmission angle beneath the surface, and $\varphi$ denotes the azimuth angle. In addition to the photons' path, HydrOptics.jl calculates the fraction of light that is being reflected back to the air side, via Fresnel reflectance. 
 
 ## Snell's Law 
 The angle of reflection describes through the vector analysis, [^1]

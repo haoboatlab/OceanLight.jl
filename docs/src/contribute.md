@@ -1,6 +1,6 @@
 # Contributors Guide
 
-Thank you for considering contributions to OceanLight! We hope this guide helps.
+Thank you for considering contributions to HydrOptics! We hope this guide helps.
 
 Feel free to ask us questions and chat with us at any time about any topic at all
 by:
@@ -9,45 +9,45 @@ by:
 
 ## Creating issues
 
-The simplest way to contribute to OceanLight is to create or comment on issues.
+The simplest way to contribute to HydrOptics is to create or comment on issues.
 
 The most useful bug reports:
 
-* Provide an explicit code snippet --- not just a link --- that reproduces the bug in the latest tagged version of OceanLight. This is sometimes called the ["minimal working example"](https://en.wikipedia.org/wiki/Minimal_working_example). Reducing bug-producing code to a minimal example can dramatically decrease the time it takes to resolve an issue.
+* Provide an explicit code snippet --- not just a link --- that reproduces the bug in the latest tagged version of HydrOptics. This is sometimes called the ["minimal working example"](https://en.wikipedia.org/wiki/Minimal_working_example). Reducing bug-producing code to a minimal example can dramatically decrease the time it takes to resolve an issue.
 
 * Paste the _entire_ error received when running the code snippet, even if it's unbelievably long.
 
 * Use triple backticks (e.g., ````` ```some_code; and_some_more_code;``` `````) to enclose code snippets, and other [markdown formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) to make your issue easy and quick to read.
 
-* Report the OceanLight version, Julia version, machine (especially if using a GPU) and any other possibly useful details of the computational environment in which the bug was created.
+* Report the HydrOptics version, Julia version, machine (especially if using a GPU) and any other possibly useful details of the computational environment in which the bug was created.
 
 ## But I want to _code_!
 
-* New users help write OceanLight code and documentation by [forking the OceanLight repository](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks), [using git](https://guides.github.com/introduction/git-handbook/) to edit code and docs, and then creating a [pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork). Pull requests are reviewed by OceanLight collaborators.
+* New users help write HydrOptics code and documentation by [forking the HydrOptics repository](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks), [using git](https://guides.github.com/introduction/git-handbook/) to edit code and docs, and then creating a [pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork). Pull requests are reviewed by HydrOptics collaborators.
 
-* A pull request can be merged once it is reviewed and approved by collaborators. If the pull request author has write access, they have the responsibility of merging their pull request. Otherwise, OceanLight.jl collaborators will execute the merge with permission from the pull request author.
+* A pull request can be merged once it is reviewed and approved by collaborators. If the pull request author has write access, they have the responsibility of merging their pull request. Otherwise, HydrOptics.jl collaborators will execute the merge with permission from the pull request author.
 
 * Note: for small or minor changes (such as fixing a typo in documentation), the [GitHub editor](https://docs.github.com/en/github/managing-files-in-a-repository/managing-files-on-github/editing-files-in-your-repository) is super useful for forking and opening a pull request with a single click.
 
-* Write your code with love and care. In particular, conform to existing OceanLight style and formatting conventions. For example, we love verbose and explicit variable names, use `TitleCase` for types, `snake_case` for objects, and always.put.spaces.after.commas. For formatting decisions we loosely follow the [YASGuide](https://github.com/jrevels/YASGuide). It's worth few extra minutes of our time to leave future generations with well-written, readable code.
+* Write your code with love and care. In particular, conform to existing HydrOptics style and formatting conventions. For example, we love verbose and explicit variable names, use `TitleCase` for types, `snake_case` for objects, and always.put.spaces.after.commas. For formatting decisions we loosely follow the [YASGuide](https://github.com/jrevels/YASGuide). It's worth few extra minutes of our time to leave future generations with well-written, readable code.
 
 ## What is a "collaborator" and how can I become one?
 
-* Collaborators have permissions to review pull requests and status allows a contributor to review pull requests in addition to opening them. Collaborators can also create branches in the main OceanLight repository.
+* Collaborators have permissions to review pull requests and status allows a contributor to review pull requests in addition to opening them. Collaborators can also create branches in the main HydrOptics repository.
 
-* We ask that new contributors try their hand at forking OceanLight, and opening and merging a pull request before requesting collaborator status.
+* We ask that new contributors try their hand at forking HydrOptics, and opening and merging a pull request before requesting collaborator status.
 
-## What's a good way to start developing OceanLight?
+## What's a good way to start developing HydrOptics?
 
-* Try to run OceanLight and play around with it. If you run into any problems or find it difficult
+* Try to run HydrOptics and play around with it. If you run into any problems or find it difficult
   to use or understand, please open an issue!
 
 * Write up an example or tutorial on how to do something useful with
-  OceanLight, like how to set up a new configuration.
+  HydrOptics, like how to set up a new configuration.
 
 * Improve documentation or comments if you found something hard to use.
 
-* Implement a new feature if you need it to use OceanLight.
+* Implement a new feature if you need it to use HydrOptics.
 
 If you're interested in working on something, let us know by commenting on existing issues or 
 by opening a new issue. This is to make sure no one else is working on the same issue and so 
@@ -73,7 +73,7 @@ we can help and guide you in case there is anything you need to know beforehand.
 ## Reporting a bug
 
 The easiest way to get involved is to report issues you encounter when using
-OceanLight or by requesting something you think is missing.
+HydrOptics or by requesting something you think is missing.
 
 * Head over to the [issues](hhttps://github.com/haoboatlab/OceanLight.jl/issues) page.
 
@@ -93,10 +93,10 @@ OceanLight or by requesting something you think is missing.
   a Mac or `git bash` on Windows).
 
 * Login to your GitHub account and make a fork of the
-  [OceanLight repository](https://github.com/haoboatlab/OceanLight.jl) by
+  [HydrOptics repository](https://github.com/haoboatlab/OceanLight.jl) by
   clicking the "Fork" button.
 
-* Clone your fork of the OceanLight repository (in terminal on Mac/Linux or git shell/
+* Clone your fork of the HydrOptics repository (in terminal on Mac/Linux or git shell/
   GUI on Windows) in the location you'd like to keep it.
   ```
   git clone https://github.com/haoboatlab/OceanLight.jl.git
@@ -113,7 +113,7 @@ OceanLight or by requesting something you think is missing.
   typing in `] instantiate`. This will install all the dependencies in the Project.toml
   file.
 
-* You can test to make sure OceanLight works by typing in `] test`. Doing so will run all
+* You can test to make sure HydrOptics works by typing in `] test`. Doing so will run all
   the tests (and this can take a while).
 
 Your development environment is now ready!

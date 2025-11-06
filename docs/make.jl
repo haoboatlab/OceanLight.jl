@@ -1,7 +1,7 @@
-using Documenter, OceanLight
+using Documenter, HydrOptics
 
 makedocs(
-    sitename="OceanLight.jl", format = Documenter.HTML(prettyurls=true),
+    sitename="HydrOptics.jl", format = Documenter.HTML(prettyurls=true),
     pages = [
         "Home" => "index.md",
         "Quick Start" => [
@@ -23,5 +23,5 @@ makedocs(
     ])
 
 deploydocs(;
-    repo="github.com/haoboatlab/OceanLight.jl",
+    repo="github.com/haoboatlab/HydrOptics.jl",
 )
