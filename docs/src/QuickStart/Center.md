@@ -7,11 +7,11 @@ First, we import `HydrOptics` packages and another `random` dependent package, t
 ```@setup  Center
 cd(mktempdir()) 
 using Pkg 
-Pkg.add("OceanLight") 
+Pkg.add("HydrOptics") 
 Pkg.add("Plots") 
 ```
 ```@example Center 
-using OceanLight 
+using HydrOptics 
 using Random
 ```
 
@@ -50,24 +50,24 @@ nxeta = 512                 # Number of surface elevation grid point in x direct
 nyeta = 512                 # Number of surface elevation grid point in y direction
 pex = 2*pi/20.0             # Lowest wavenumber that can be captured during the derivative of surface elevation in y direction
 ```
-**NOTE:** `num` must be set to a constant value of 31 (number of angle measurement in Kirk, 1981 [^2]). `kbc` accepts only binary values (0 or 1), representing periodic boundary conditions. In contrast to grid spacing `dz` in z-direction, the grid spacings in the x- and y-directions (`dx` and `dy`) are calculated automatically by `OceanLight.readparams`,  using the formulas $dx \times nxe  = \frac{2\pi}{pex}$, and $dy \times nye = \frac{2\pi}{pey}$. For more detail on all parameters  used, see [`Simulation parameters`](@ref simulation_parameters). 
+**NOTE:** `num` must be set to a constant value of 31 (number of angle measurement in Kirk, 1981 [^2]). `kbc` accepts only binary values (0 or 1), representing periodic boundary conditions. In contrast to grid spacing `dz` in z-direction, the grid spacings in the x- and y-directions (`dx` and `dy`) are calculated automatically by `HydrOptics.readparams`,  using the formulas $dx \times nxe  = \frac{2\pi}{pex}$, and $dy \times nye = \frac{2\pi}{pey}$. For more detail on all parameters  used, see [`Simulation parameters`](@ref simulation_parameters). 
 
-To create a input variable file suitable for this package, user can either create a new file in `.yml` format, copy, and paste the code block above, or using a build-in function `OceanLight.writeparams` to automate the process. 
+To create a input variable file suitable for this package, user can either create a new file in `.yml` format, copy, and paste the code block above, or using a build-in function `HydrOptics.writeparams` to automate the process. 
 
-The function `OceanLight.writeparams` converts the dictionary of input variables into the `light.yml` file. 
+The function `HydrOptics.writeparams` converts the dictionary of input variables into the `light.yml` file. 
 
 ```@example Center
 data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>ztop,"num"=>num),
             "wave"=>Dict("pex"=>pex,"pey"=>pey,"nxeta"=>nxeta,"nyeta"=>nyeta),
             "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc))
 
-OceanLight.writeparams(data)
+HydrOptics.writeparams(data)
 ```
 
-Once the input variable file is generated, this package calculates other related variables and stores all values in the `Param` structure, through `OceanLight.readparams`. The default input variable file name that will be read is `light.yml`, but can be specified by users. In this case, we store `Param` structure in variable `p`. 
+Once the input variable file is generated, this package calculates other related variables and stores all values in the `Param` structure, through `HydrOptics.readparams`. The default input variable file name that will be read is `light.yml`, but can be specified by users. In this case, we store `Param` structure in variable `p`. 
 
 ```@example Center
-p = OceanLight.readparams()
+p = HydrOptics.readparams()
 ```
 
 ## Initialize Parameters
@@ -94,14 +94,14 @@ fres = zeros(p.nxp,p.nyp);
 
 During the air-water interaction process, HydrOptics simulates the photons transfer directly downward from the air side, interacts with the water surface, and transfer down into water medium. 
 
-User can generate random surface elevation attribution $\{\eta,\eta_{x},\eta_{y}\}$ with `OceanLight.setwave!`, or provided specific data $\{\eta_{0},\eta_{x0},\eta_{y0}\}$  . HydrOptics can map the user's provided data of $\{\eta_{0},\eta_{x0},\eta_{y0}\}$, which might have different dimension onto the suitable dimension of input value $\{η,ηx,ηy\}$ with `OceanLight.convertwave!`.
+User can generate random surface elevation attribution $\{\eta,\eta_{x},\eta_{y}\}$ with `HydrOptics.setwave!`, or provided specific data $\{\eta_{0},\eta_{x0},\eta_{y0}\}$  . HydrOptics can map the user's provided data of $\{\eta_{0},\eta_{x0},\eta_{y0}\}$, which might have different dimension onto the suitable dimension of input value $\{η,ηx,ηy\}$ with `HydrOptics.convertwave!`.
 
 In this example, we will consider the case of flat surface elevation. Hence, $\{η,ηx,ηy\}$ is equal to the matrix of zeros. 
 
-Once all the input variables are in place, `OceanLight.interface!` calculate the refraction of the light between two medium given surface elevation attribution and return the position, reflectance angle, and transmission ratio. 
+Once all the input variables are in place, `HydrOptics.interface!` calculate the refraction of the light between two medium given surface elevation attribution and return the position, reflectance angle, and transmission ratio. 
 
 ```@example Center
-OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
+HydrOptics.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 ```
 
 `HydrOptics` tracks the path of each photon travelling inside the water medium and store the irradiance value in the grid `ed`. 
@@ -117,7 +117,7 @@ interi = zeros(Int64,4)
 interj = zeros(Int64,4)
 ix = div(p.nxη,2)+1
 iy = div(p.nyη,2)+1
-ϕps,θps = OceanLight.phasePetzold()
+ϕps,θps = HydrOptics.phasePetzold()
 ```
 
 ## Monte Carlo Simulation
@@ -128,7 +128,7 @@ The `transfer!` function simulate a single photon path and store its landed posi
 
 ```@example Center
 for ip = 1:p.nphoton
-    OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
+    HydrOptics.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
         ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,p,1)
 end
 ```
@@ -136,10 +136,10 @@ end
 Lastly, once the field `ed` is obtained. The `applybc!` apply and ensure the boundary condition of the `ed`. 
 
 ```@example Center
-OceanLight.applybc!(ed,p)
+HydrOptics.applybc!(ed,p)
 ```
 
-Once the simulation is over, the downwelling irradiance field $I(x,y,z)$ is stored in variable `ed`. To export the data, the build-in function `OceanLight.exported` export data and its statistical information in to `.h5` format, depended on the path given by user. 
+Once the simulation is over, the downwelling irradiance field $I(x,y,z)$ is stored in variable `ed`. To export the data, the build-in function `HydrOptics.exported` export data and its statistical information in to `.h5` format, depended on the path given by user. 
 
 The result downwelling irradiance field $I(x,y,z)$ is in 3 dimension tensor, where the first two dimensions represent horizontal field, and the last represents the vertical field or depth. The first few depth layer represents the air phase, hence $I(x,y,z)$ is zeros, depending on how many layer specified as air phases `ztop`. To visualize using `Plots` julia package, users can try the example code below. 
 
