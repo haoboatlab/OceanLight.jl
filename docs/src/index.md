@@ -17,13 +17,13 @@ Optical oceanography concerns all aspects of light and its interaction with seaw
 
 ```julia
 using Pkg
-Pkg.add("OceanLight")
+Pkg.add("HydrOptics")
 ```
 
 After installing, verify that HydrOptics works as intended by:
 
 ```Julia
-Pkg.test("OceanLight")
+Pkg.test("HydrOptics")
 ```
 
 ## Running your first model 
@@ -31,7 +31,7 @@ Pkg.test("OceanLight")
 As a simple example, let’s calculate the downwelling irradiance field when the surface is completely flat and a total of 10,000,000 photons are focused at a single point in the center.
 
 ```Julia
-using OceanLight 
+using HydrOptics 
 using Random
 
 # irradiance
@@ -59,8 +59,8 @@ data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>zto
             "wave"=>Dict("pex"=>pex,"pey"=>pey,"nxeta"=>nxeta,"nyeta"=>nyeta),
             "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc))
 
-OceanLight.writeparams(data)
-p = OceanLight.readparams()
+HydrOptics.writeparams(data)
+p = HydrOptics.readparams()
 
 η = zeros(p.nxs,p.nys)
 ηx = zeros(p.nxs,p.nys)
@@ -79,14 +79,14 @@ interi = zeros(Int64,4)
 interj = zeros(Int64,4)
 ix = div(p.nxη,2)+1
 iy = div(p.nyη,2)+1
-ϕps,θps = OceanLight.phasePetzold()
+ϕps,θps = HydrOptics.phasePetzold()
 
-OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
+HydrOptics.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 for ip = 1:p.nphoton
-    OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
+    HydrOptics.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
         ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,p,1)
 end
-OceanLight.applybc!(ed,p)
+HydrOptics.applybc!(ed,p)
 
 max_val, max_loc = findmax(ed)
 ed = ed./max_val
@@ -167,17 +167,17 @@ plot(p1, p2, p3, layout=l,
      left_margin=10mm, right_margin=10mm)
 ```
 
-![Center1e7](https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/center1e7.png)
+![Center1e7](https://raw.githubusercontent.com/haoboatlab/HydrOptics.jl/main/docs/src/assets/center1e7.png)
 
-For a complete guide with details on each function and step, see the [HydrOptics's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
+For a complete guide with details on each function and step, see the [HydrOptics's Documentation](https://haoboatlab.github.io/HydrOptics.jl/dev/QuickStart/Center/). 
 
 ## Gallery
 
-![Center1e8](https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Center1e8.png)
+![Center1e8](https://raw.githubusercontent.com/haoboatlab/HydrOptics.jl/main/docs/src/assets/Center1e8.png)
 
 *Simulation of $10^{8}$ Photons at the center of the flat surface. (a) irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) irradiance field on the vertical plane at the center*
 
-![Wholegrid1000](https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Wholegrid1000.png)
+![Wholegrid1000](https://raw.githubusercontent.com/haoboatlab/HydrOptics.jl/main/docs/src/assets/Wholegrid1000.png)
 
 *Simulation of 1000 Photons at the every grid point with observed surface elevation. (a) irradiance field on the horizontal plane at $30\ \mathrm{m}$ depth. (b) irradiance field on the horizontal plane at $150\ \mathrm{m}$ depth. (c) irradiance field on the vertical plane at the center.*
 

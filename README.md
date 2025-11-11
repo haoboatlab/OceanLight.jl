@@ -1,6 +1,6 @@
 # HydrOptics.jl
 
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://haoboatlab.github.io/OceanLight.jl/dev/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://haoboatlab.github.io/HydrOptics.jl/dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://mit-license.org/)
 
 ## Overview
@@ -21,13 +21,13 @@ HydrOptics requires Julia software. To do so,
 
 ```Julia
 using Pkg
-Pkg.add("OceanLight")
+Pkg.add("HydrOptics")
 ```
 
 After installing, verify that HydrOptics works as intended by:
 
 ```Julia
-Pkg.test("OceanLight")
+Pkg.test("HydrOptics")
 ```
 
 ## Running your first model 
@@ -35,7 +35,7 @@ Pkg.test("OceanLight")
 As a simple example, let’s calculate the downwelling irradiance field when the surface is completely flat and a total of 10,000,000 photons are focused at a single point in the center.
 
 ```Julia
-using OceanLight 
+using HydrOptics 
 using Random
 
 # irradiance
@@ -63,8 +63,8 @@ data=Dict("irradiance"=>Dict("nxe"=>nxe,"nye"=>nye,"nz"=>nz,"dz"=>dz,"ztop"=>zto
             "wave"=>Dict("pex"=>pex,"pey"=>pey,"nxeta"=>nxeta,"nyeta"=>nyeta),
             "photon"=>Dict("nxp"=>nxp,"nyp"=>nyp,"nphoton"=>nphoton,"a"=>a,"b"=>b,"kr"=>kr,"kbc"=>kbc))
 
-OceanLight.writeparams(data)
-p = OceanLight.readparams()
+HydrOptics.writeparams(data)
+p = HydrOptics.readparams()
 
 η = zeros(p.nxs,p.nys)
 ηx = zeros(p.nxs,p.nys)
@@ -83,14 +83,14 @@ interi = zeros(Int64,4)
 interj = zeros(Int64,4)
 ix = div(p.nxη,2)+1
 iy = div(p.nyη,2)+1
-ϕps,θps = OceanLight.phasePetzold()
+ϕps,θps = HydrOptics.phasePetzold()
 
-OceanLight.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
+HydrOptics.interface!(xpb,ypb,zpb,θ,ϕ,fres,η,ηx,ηy,p)
 for ip = 1:p.nphoton
-    OceanLight.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
+    HydrOptics.transfer!(ed,esol,θ[ix,iy],ϕ[ix,iy],fres[ix,iy],ip,xpb[ix,iy],
         ypb[ix,iy],zpb[ix,iy],area,interi,interj,randrng,η,ϕps,θps,p,1)
 end
-OceanLight.applybc!(ed,p)
+HydrOptics.applybc!(ed,p)
 
 max_val, max_loc = findmax(ed)
 ed = ed./max_val
@@ -172,25 +172,25 @@ plot(p1, p2, p3, layout=l,
      left_margin=10mm, right_margin=10mm)
 ```
 </details>
-<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/center1e7.png" width="600" align="center">
+<img  src="https://raw.githubusercontent.com/haoboatlab/HydrOptics.jl/main/docs/src/assets/center1e7.png" width="600" align="center">
 
-For a complete guide with details on each function and step, see the [HydrOptics's Documentation](https://haoboatlab.github.io/OceanLight.jl/dev/QuickStart/Center/). 
+For a complete guide with details on each function and step, see the [HydrOptics's Documentation](https://haoboatlab.github.io/HydrOptics.jl/dev/QuickStart/Center/). 
 
 ## Contributing
 
-We always appreciate new contributions, no matter how big or small. Please [submit a pull request](https://github.com/haoboatlab/OceanLight.jl/compare) with your changes to help us make HydrOptics even better! 
+We always appreciate new contributions, no matter how big or small. Please [submit a pull request](https://github.com/haoboatlab/HydrOptics.jl/compare) with your changes to help us make HydrOptics even better! 
 
-If you'd like to work on a new feature, or if you're new to open source and want to crowd-source projects that match your interests, feel free to [raise an issue](https://github.com/haoboatlab/OceanLight.jl/issues/new). Ideas, suggestions, and questions are always welcome!
+If you'd like to work on a new feature, or if you're new to open source and want to crowd-source projects that match your interests, feel free to [raise an issue](https://github.com/haoboatlab/HydrOptics.jl/issues/new). Ideas, suggestions, and questions are always welcome!
 
-For more information, check out our [contributor guide](https://haoboatlab.github.io/OceanLight.jl/dev/contribute/).
+For more information, check out our [contributor guide](https://haoboatlab.github.io/HydrOptics.jl/dev/contribute/).
 
 ## Gallery
 
-<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Center1e8.png" width="600" align="center">
+<img  src="https://raw.githubusercontent.com/haoboatlab/HydrOptics.jl/main/docs/src/assets/Center1e8.png" width="600" align="center">
 *Simulation of 1e8 Photons at the center of the flat surface. (a) irradiance field on the horizontal plane at 30 m depth. (b) irradiance field on the horizontal plane at 150 m depth. (c) irradiance field on the vertical plane at the center.*
 
 
-<img  src="https://raw.githubusercontent.com/haoboatlab/OceanLight.jl/main/docs/src/assets/Wholegrid1000.png" width="600" align="center">
+<img  src="https://raw.githubusercontent.com/haoboatlab/HydrOptics.jl/main/docs/src/assets/Wholegrid1000.png" width="600" align="center">
 *Simulation of 1000 Photons at the every grid point with observed surface elevation. (a) irradiance field on the horizontal plane at 30 m depth. (b) irradiance field on the horizontal plane at 150 m depth. (c) irradiance field on the vertical plane at the center.*
 
 ## Reference 

@@ -5,7 +5,7 @@ Thank you for considering contributions to HydrOptics! We hope this guide helps.
 Feel free to ask us questions and chat with us at any time about any topic at all
 by:
 
-* [Opening a GitHub issue](https://github.com/haoboatlab/OceanLight.jl/issues/new)
+* [Opening a GitHub issue](https://github.com/haoboatlab/HydrOptics.jl/issues/new)
 
 ## Creating issues
 
@@ -75,7 +75,7 @@ we can help and guide you in case there is anything you need to know beforehand.
 The easiest way to get involved is to report issues you encounter when using
 HydrOptics or by requesting something you think is missing.
 
-* Head over to the [issues](hhttps://github.com/haoboatlab/OceanLight.jl/issues) page.
+* Head over to the [issues](hhttps://github.com/haoboatlab/HydrOptics.jl/issues) page.
 
 * Search to see if your issue already exists or has even been solved previously.
 
@@ -93,20 +93,20 @@ HydrOptics or by requesting something you think is missing.
   a Mac or `git bash` on Windows).
 
 * Login to your GitHub account and make a fork of the
-  [HydrOptics repository](https://github.com/haoboatlab/OceanLight.jl) by
+  [HydrOptics repository](https://github.com/haoboatlab/HydrOptics.jl) by
   clicking the "Fork" button.
 
 * Clone your fork of the HydrOptics repository (in terminal on Mac/Linux or git shell/
   GUI on Windows) in the location you'd like to keep it.
   ```
-  git clone https://github.com/haoboatlab/OceanLight.jl.git
+  git clone https://github.com/haoboatlab/HydrOptics.jl.git
   ```
 
 * Navigate to that folder in the terminal or in Anaconda Prompt if you're on Windows.
 
 * Connect your repository to the upstream (main project).
   ```
-  git remote add OceanLight https://github.com/haoboatlab/OceanLight.jl.git
+  git remote add HydrOptics https://github.com/haoboatlab/HydrOptics.jl.git
   ```
 
 * Create the development environment by opening Julia via `julia --project` then
@@ -129,7 +129,7 @@ When you're done making changes, commit the changes you made. Chris Beams has wr
 [guide](https://chris.beams.io/posts/git-commit/) on how to write good commit messages.
 
 When you think your changes are ready to be merged into the main repository, push to your fork
-and [submit a pull request](https://github.com/haoboatlab/OceanLight.jl/compare/).
+and [submit a pull request](https://github.com/haoboatlab/HydrOptics.jl/compare/).
 
 **Working on your first Pull Request?** You can learn how from this _free_ video series
 [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github), Aaron Meurer's [tutorial on the git workflow](https://www.asmeurer.com/git-workflow/), or the guide [“How to Contribute to Open Source"](https://opensource.guide/how-to-contribute/).
