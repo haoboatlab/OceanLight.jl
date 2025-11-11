@@ -6,6 +6,9 @@
 
 Optical oceanography concerns all aspects of light and its interaction with seawater, which are crucial for addressing problems related to physical, biological, and chemical oceanographic processes, such as phytoplankton photosynthesis, biogeochemical cycles, and climate change [^3] [^4]. However, due to the complex interaction between light and free-surface wave geometry, the irradiance distribution can be highly variable [^5] [^6], making it difficult to obtain analytical solutions. **HydrOptics.jl** enables physics-based, reproducible simulations of light distribution beneath the ocean surface.
 
+**OceanLight.jl** implements a Monte Carlo ray-tracing algorithm, whose accuracy depends on the number of simulated photon paths. This approach yields not only averaged quantities, such as mean intensity and flux, but also detailed three-dimensional distributions of irradiance. Combined with its built-in light refraction calculator, OceanLight.jl is a standalone tool specifically designed for modeling irradiance fields modulated by complex ocean surface geometries. For more general applications that require only averaged radiative quantities, deterministic solvers of the radiative transfer equation (RTE) are available, such as PythonicDISORT [^7] and DISORT [^8]. For time-dependent problems, the open-source package OceanBioME.jl [^9] includes a model of biomass-induced light attenuation that estimates the photon flux available at specific depths using a plane-parallel approximation. 
+
+
 ## Quick Install 
 
 1. [Install Julia](https://julialang.org/downloads/)
@@ -184,10 +187,16 @@ For a complete guide with details on each function and step, see the [HydrOptics
 
 [^2]: Kirk, J. T. O. (1981). Monte Carlo procedure for simulating the penetration of light into natural waters. In Technical paper - Commonwealth Scientific and Industrial Research Organization (Vol. 36).
 
-[^3]: Dickey, T. D., Kattawar, G. W., & Voss, K. J. (2011). Shedding new light on light in the ocean. Physics Today, 64(4), 44-49.
+[^3]: Dickey, T. D., Kattawar, G. W., & Voss, K. J. (2011). Shedding new light on light in the ocean. Physics Today, 64(4), 44-49. https://doi.org/10.1063/1.3580492
 
-[^4]: Dickey, T., Lewis, M., & Chang, G. (2006). Optical oceanography: recent advances and future directions using global remote sensing and in situ observations. Reviews of geophysics, 44(1).
+[^4]: Dickey, T., Lewis, M., & Chang, G. (2006). Optical oceanography: recent advances and future directions using global remote sensing and in situ observations. Reviews of geophysics, 44(1). https://doi.org/10.1029/2003RG000148
 
-[^5]: Darecki, M., Stramski, D., & Sokólski, M. (2011). Measurements of high‐frequency light fluctuations induced by sea surface waves with an Underwater Porcupine Radiometer System. Journal of Geophysical Research: Oceans, 116(C7).
+[^5]: Darecki, M., Stramski, D., & Sokólski, M. (2011). Measurements of high‐frequency light fluctuations induced by sea surface waves with an Underwater Porcupine Radiometer System. Journal of Geophysical Research: Oceans, 116(C7). https://doi.org/10.1029/2011JC007338
 
-[^6]: Gernez, P., Stramski, D., & Darecki, M. (2011). Vertical changes in the probability distribution of downward irradiance within the near‐surface ocean under sunny conditions. Journal of Geophysical Research: Oceans, 116(C7).
+[^6]: Gernez, P., Stramski, D., & Darecki, M. (2011). Vertical changes in the probability distribution of downward irradiance within the near‐surface ocean under sunny conditions. Journal of Geophysical Research: Oceans, 116(C7). https://doi.org/10.1029/2011JC007156
+
+[^7]: Ho, D. J., (2024). PythonicDISORT: A Python reimplementation of the Discrete Ordinate Radiative Transfer package DISORT. Journal of Open Source Software, 9(103), 6442, https://doi.org/10.21105/joss.06442
+
+[^8]: Stamnes, K., Tsay, S. C., Wiscombe, W., & Jayaweera, K. (1988). Numerically stable algorithm for discrete-ordinate-method radiative transfer in multiple scattering and emitting layered media. Applied optics, 27(12), 2502-2509. https://doi.org/10.1364/AO.27.002502
+
+[^9]: Strong-Wright et al., (2023). OceanBioME.jl: A flexible environment for modelling the coupled interactions between ocean biogeochemistry and physics. Journal of Open Source Software, 8(90), 5669, https://doi.org/10.21105/joss.05669
