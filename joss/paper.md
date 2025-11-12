@@ -39,7 +39,7 @@ Here, we introduce `HydrOptics`, a Julia-based software package designed to faci
 
 The main features of `HydrOptics` are illustrated in figure 2.
 
-![Flow Diagram of the HydrOptics's main feature.\label{fig:}](Flow_diagramver3.png)
+![Flow Diagram of the HydrOptics's main feature.\label{fig:}](FlowChart.png)
 
 `HydrOptics` requires user input in three categories.
 
