@@ -2,6 +2,7 @@
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://haoboatlab.github.io/HydrOptics.jl/dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://mit-license.org/)
+[![DOI](https://zenodo.org/badge/664399702.svg)](https://doi.org/10.5281/zenodo.17613507)
 
 ## Overview
 
